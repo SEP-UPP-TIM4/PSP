@@ -1,6 +1,7 @@
 package com.example.apigateway.model;
 
 import lombok.*;
+import org.bouncycastle.crypto.generators.BCrypt;
 
 import javax.persistence.*;
 import java.util.Set;

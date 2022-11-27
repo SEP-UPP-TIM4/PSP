@@ -1,9 +1,6 @@
 package com.example.apigateway.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +12,7 @@ import javax.persistence.Id;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PaymentMethod {
 
     @Id
@@ -24,4 +22,5 @@ public class PaymentMethod {
     private String name;
 
     private String url;
+
 }

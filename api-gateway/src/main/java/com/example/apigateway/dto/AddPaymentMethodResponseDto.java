@@ -1,22 +1,16 @@
 package com.example.apigateway.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterResponseDto {
-
-    private UUID id;
-
+@Getter
+@Setter
+public class AddPaymentMethodResponseDto {
+    private Long id;
     private String name;
-
-    private String apiKey;
+    private String url;
 }
