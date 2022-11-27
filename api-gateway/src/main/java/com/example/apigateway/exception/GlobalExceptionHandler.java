@@ -15,7 +15,11 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
-
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception) {
+        ExceptionResponse response = getExceptionResponse(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
     private ExceptionResponse getExceptionResponse(String message) {
         ExceptionResponse response = new ExceptionResponse();
         response.setDateTime(LocalDateTime.now());

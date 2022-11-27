@@ -21,4 +21,5 @@ public class PaymentMethodService {
         if(paymentMethod.isPresent()) throw new NameAlreadyExistsException(name, PaymentMethod.class.getSimpleName());
         return paymentMethodRepository.save(PaymentMethod.builder().name(name).url(url).build());
     }
+
 }
