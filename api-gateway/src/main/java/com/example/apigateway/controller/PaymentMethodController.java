@@ -6,7 +6,6 @@ import com.example.apigateway.dto.NewQRCodeDto;
 import com.example.apigateway.model.PaymentMethod;
 import com.example.apigateway.service.PaymentMethodService;
 import org.modelmapper.ModelMapper;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -18,12 +17,11 @@ public class PaymentMethodController {
     private final PaymentMethodService paymentMethodService;
 
     private final ModelMapper modelMapper = new ModelMapper();
+    private final RestTemplate restTemplate;
 
-    @LoadBalanced
-    RestTemplate restTemplate = new RestTemplate();
-
-    public PaymentMethodController(PaymentMethodService paymentMethodService) {
+    public PaymentMethodController(PaymentMethodService paymentMethodService, RestTemplate restTemplate) {
         this.paymentMethodService = paymentMethodService;
+        this.restTemplate = restTemplate;
     }
 
 
@@ -38,7 +36,7 @@ public class PaymentMethodController {
     @ResponseStatus(value = HttpStatus.OK)
     public void check() {
         String fraudCheckResponse = restTemplate.postForObject(
-                "http://localhost:1/api/qr/v1/generate",
+                "http://QR-CODE-SERVICE/api/qr/v1/generate",
                 new NewQRCodeDto("", 0, 0), String.class
         );
         System.out.println(fraudCheckResponse);
