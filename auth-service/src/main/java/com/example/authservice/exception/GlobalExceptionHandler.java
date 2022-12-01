@@ -15,6 +15,12 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<Object> usernameAlreadyExists(UsernameAlreadyExistsException exception) {
+        ExceptionResponse response = getExceptionResponse(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception) {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());

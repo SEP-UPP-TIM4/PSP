@@ -1,132 +1,89 @@
-//package com.example.apigateway.security.config;
-//
-//
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.http.HttpMethod;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-//import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.builders.WebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-//import org.springframework.security.config.http.SessionCreationPolicy;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-//import org.springframework.web.cors.CorsConfiguration;
-//import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-//import org.springframework.web.filter.CorsFilter;
-//
-//import javax.servlet.http.HttpServletResponse;
-//
-//import static java.lang.String.format;
-//
-//@EnableWebSecurity
-//@EnableGlobalMethodSecurity(
-//        securedEnabled = true,
-//        jsr250Enabled = true,
-//        prePostEnabled = true
-//)
-//public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-//
-//    private final UserRepository userRepository;
-//
-//    private final JwtTokenFilter jwtTokenFilter;
-//
-//    public WebSecurityConfig(UserRepository userRepository, JwtTokenFilter jwtTokenFilter) {
-//        this.userRepository = userRepository;
-//        this.jwtTokenFilter = jwtTokenFilter;
-//    }
-//
-//    @Override @Bean
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(username -> userRepository
-//                .findByUsername(username)
-//                .orElseThrow(
-//                        () -> new UsernameNotFoundException(
-//                                format("User: %s, not found", username)
-//                        )
-//                ));
-//    }
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//
-//        // Enable CORS and disable CSRF
-//        http = http.cors().and().csrf().disable();
-//
-//        // Set session management to stateless
-//        http = http
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and();
-//
-//        // Set unauthorized requests exception handler
-//        http = http
-//                .exceptionHandling()
-//                .authenticationEntryPoint(
-//                        (request, response, ex) -> {
-//                            response.sendError(
-//                                    HttpServletResponse.SC_UNAUTHORIZED,
-//                                    ex.getMessage()
-//                            );
-//                        }
-//                )
-//                .and();
-//
-//        // Set permissions on endpoints
-//        http.authorizeRequests()
-//                // Our public endpoints
-//                .antMatchers("/api/v1/**").permitAll()
-//                .antMatchers("/api/test/**").permitAll() // permit the class of test
-//                .antMatchers("/**").permitAll() // permit all the routers after swagger-ui.html
-//                .anyRequest().authenticated();
-//
-//        // Add JWT token filter
-//        http.addFilterBefore(
-//                jwtTokenFilter,
-//                UsernamePasswordAuthenticationFilter.class
-//        );
-//    }
-//
-//    // Used by spring security if CORS is enabled.
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        UrlBasedCorsConfigurationSource source =
-//                new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("*");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("*");
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
-//    }
-//
-//    @Override
-//    public void configure(WebSecurity web) {
-//        // Autentifikacija ce biti ignorisana ispod navedenih putanja (kako bismo ubrzali pristup resursima)
-//        // Zahtevi koji se mecuju za web.ignoring().antMatchers() nemaju pristup SecurityContext-u
-//
-//        // Dozvoljena POST metoda na ruti /auth/login, za svaki drugi tip HTTP metode greska je 401 Unauthorized
-//        //web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/auth/*");
-//        //web.ignoring().antMatchers(HttpMethod.PUT, "/api/v1/users/*");
-//
-//        // Ovim smo dozvolili pristup statickim resursima aplikacije
-//        web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
-//                "/**/*.css", "/**/*.js");
-//    }
-//
-//}
+package com.example.authservice.security.config;
+
+import com.example.authservice.security.config.auth.RestAuthenticationEntryPoint;
+import com.example.authservice.security.config.auth.TokenAuthenticationFilter;
+import com.example.authservice.security.config.util.TokenUtils;
+import com.example.authservice.service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    public WebSecurityConfig(CustomUserDetailsService customUserDetailsService, RestAuthenticationEntryPoint restAuthenticationEntryPoint, TokenUtils tokenUtils) {
+        this.customUserDetailsService = customUserDetailsService;
+        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+        this.tokenUtils = tokenUtils;
+        this.passwordEncoder = new BCryptPasswordEncoder();
+    }
+
+
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final CustomUserDetailsService customUserDetailsService;
+
+    // Handler za vracanje 401 kada klijent sa neodogovarajucim korisnickim imenom i lozinkom pokusa da pristupi resursu
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(customUserDetailsService)
+                .passwordEncoder(passwordEncoder);
+    }
+
+
+
+
+    private final TokenUtils tokenUtils;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+
+                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+
+                .authorizeRequests().antMatchers("/api/v1/users/*").permitAll()
+                .antMatchers("/api/v1/users").permitAll()// /auth/**
+                .antMatchers("api/v1/credentials").permitAll()// /auth/**
+                .antMatchers("api/v1/merchant").permitAll()
+                .anyRequest().authenticated().and()
+
+                .cors().and()
+
+                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService), BasicAuthenticationFilter.class);
+
+        http.csrf().disable();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/users");
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/users/login");
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/credentials");
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/merchant");
+
+        web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
+                "/**/*.css", "/**/*.js");
+    }
+}

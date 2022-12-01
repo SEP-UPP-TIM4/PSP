@@ -7,6 +7,7 @@ import com.example.authservice.model.PaymentMethod;
 import com.example.authservice.service.PaymentMethodService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,6 +27,7 @@ public class PaymentMethodController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(value = HttpStatus.OK)
     public AddPaymentMethodResponseDto add(@RequestBody AddPaymentMethodRequestDto request) {
         PaymentMethod paymentMethod = paymentMethodService.add(request.getName(), request.getUrl());
