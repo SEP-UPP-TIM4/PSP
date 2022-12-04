@@ -1,0 +1,76 @@
+#front-img {
+    width: 55%;
+    height: 50%;
+    margin-top: 15%;
+    float: left;
+}
+
+#text-section-1 {
+    float: right;
+    width: 45%;
+    margin-top: -20%;
+    color: #1e2b6d;
+    text-decoration: none;
+    font-size: 130%;
+    line-height: 130%;
+    margin-right: 5%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#header-section-1 {
+    float: right;
+    width: 55%;
+    margin-top: -25%;
+    color: #1e2b6d;
+    text-decoration: none;
+    font-size: 180%;
+    line-height: 130%;
+    margin-right: -3%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+.container {
+    display: flex;
+}
+
+.item {
+    background: #ce8888;
+    flex-basis: 100px;
+    height: 100px;
+    margin: 5px;
+}
+
+.child {
+    margin-top: 33%;
+}
+
+.thumbnail {
+    top: -50px;
+    left: -35px;
+    display: block;
+    z-index: 999;
+    cursor: pointer;
+    -webkit-transition-property: all;
+    -webkit-transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease;
+}
+
+/*change the number below to scale to the appropriate size*/
+.thumbnail:hover {
+    transform: scale(1.5);
+    background-color: black;
+}
+
+.image-furniture-2 {
+    margin-top: 5%;
+    width: 100%;
+    height: 40%;
+    -webkit-filter: brightness(50%);
+    filter: brightness(50%);
+}
+.image-furniture-2 {
+    width: 50%;
+    margin-right: -44.5%;
+    height: 100%;
+}
