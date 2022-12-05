@@ -1,0 +1,49 @@
+<div class="payment-methods">
+    <div class="demo-button-container">
+        <table class="example-full-width" cellspacing="0">
+            <tr>
+                <td class="td-first-1">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Name</mat-label>
+                        <input matInput [(ngModel)]="newName">
+                    </mat-form-field>
+                </td>
+                <td class="td-first-1">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>URL</mat-label>
+                        <input matInput [(ngModel)]="newUrl">
+                    </mat-form-field>
+                </td>
+
+                <td class="td-first-2">
+                    <button mat-raised-button (click)="addData()" class="demo-button" style="width: 105%;">
+                        Add data
+                    </button>
+                </td>
+                <td class="td-first-2">
+                    <button mat-raised-button [disabled]="!dataToDisplay.length" (click)="removeData()"
+                        class="demo-button" style="width: 105%;">
+                        Remove data
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <table mat-table [dataSource]="dataToDisplay" class="mat-elevation-z8 demo-table" style="width: 220%;">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef style="width: 50%;">Name</th>
+            <td mat-cell *matCellDef="let element">{{element.name}}</td>
+        </ng-container>
+
+        <!-- Url Column -->
+        <ng-container matColumnDef="url">
+            <th mat-header-cell *matHeaderCellDef style="width: 50%;">Url</th>
+            <td mat-cell *matCellDef="let element">{{element.url}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr id="row" mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="selectedRow(row)"></tr>
+    </table>
+</div>

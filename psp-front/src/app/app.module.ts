@@ -15,6 +15,8 @@ import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 import { GettingStartedPageComponent } from './getting-started-page/getting-started-page.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http';
+import { AdminPageComponent } from './admin-page/admin-page.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     NavbarComponent,
     HomePageComponent,
     SignInPageComponent,
-    GettingStartedPageComponent
+    GettingStartedPageComponent,
+    AdminPageComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,8 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

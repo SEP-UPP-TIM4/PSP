@@ -8,7 +8,7 @@ import { LoginDTO } from "../dto/LoginDTO";
 })
 export class AuthenticationService {
   
-  private loginUrl = "/users/login"
+  private loginUrl = "AUTH-SERVICE/api/v1/users/login"
   
   constructor(private http: HttpClient) { }
 

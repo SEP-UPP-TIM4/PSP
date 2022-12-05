@@ -3,9 +3,10 @@
     <h1 class="logo">P<span style="color:#273b91;">S</span>P</h1>
     <i class="menu-toggle-btn fas fa-bars"></i>
     <nav class="navigation-menu">
-      <a routerLink="/"><i></i> Home</a>
-      <a routerLink="/sign-in"><i></i> SIGN IN</a>
-      <a routerLink="/getting-started" class="aj_btn">GETTING STARTED</a>
+      <a routerLink="/" *ngIf="!isLoggedIn()"><i></i> Home</a>
+      <a routerLink="/sign-in" *ngIf="!isLoggedIn()"><i></i> SIGN IN</a>
+      <a routerLink="/getting-started" class="aj_btn" *ngIf="!isLoggedIn()">GETTING STARTED</a>
+      <a routerLink="/getting-started" class="aj_btn" *ngIf="isLoggedIn()" (click)="logout()">Log out</a>
     </nav>
   </div>
 </header>

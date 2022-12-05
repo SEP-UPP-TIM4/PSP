@@ -27,15 +27,10 @@ export class SignInPageComponent {
   loginUser(credentials: NgForm) {
     let loginDTO: LoginDTO = { username: credentials.value.username, password: credentials.value.password };
     this.authService.login(loginDTO).subscribe((data: any) => {
-      alert(data.jwtToken)
-      //this.storageService.storeTokenData(data.jwt, data.refreshToken);
-      /*if (this.storageService.getRoleFromToken() == 'ROLE_USER') {
-        this.router.navigateByUrl('/home').then(() => {
-          window.location.reload();
-        });
-      } else if (this.storageService.getRoleFromToken() == 'ROLE_ADMIN') {
+      this.storageService.storeTokenData(data.jwtToken);
+      if (this.storageService.getRoleFromToken() == 'ROLE_ADMIN') {
         this.router.navigateByUrl('/admin')
-      }*/
+      }
     }, (err) => {
       alert("Not valid credentials");
     })
