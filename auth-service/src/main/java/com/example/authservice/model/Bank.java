@@ -9,12 +9,11 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class PaymentMethod {
-
+public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +22,5 @@ public class PaymentMethod {
     private String name;
     @Setter
     private String url;
-    @Setter
-    private boolean bankPayment;//izaberi banku kad se prijavljujes na nacim placanja
+
 }

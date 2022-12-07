@@ -16,9 +16,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
     @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<Object> usernameAlreadyExists(UsernameAlreadyExistsException exception) {
+    public ResponseEntity<Object> handleUsernameAlreadyExists(UsernameAlreadyExistsException exception) {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(PaymentMethodNotFound.class)
+    public ResponseEntity<Object> handlePaymentMethodNotFound(PaymentMethodNotFound exception) {
+        ExceptionResponse response = getExceptionResponse(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(BadCredentialsException.class)

@@ -30,4 +30,7 @@ public class Merchant {
     @ToString.Exclude
     private Set<Credentials> credentials;
 
+    @OneToOne
+    private User user;
+
 }

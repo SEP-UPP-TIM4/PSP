@@ -34,11 +34,11 @@ public class UserService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    public User add(AddUserDto user) {
-        Role role = roleService.findByName("ROLE_ADMIN");
-        if(userRepository.findByUsername(user.getUsername()).isPresent())
+    public User add(String username, String password, String userRole) {
+        Role role = roleService.findByName(userRole);
+        if(userRepository.findByUsername(username).isPresent())
             throw new UsernameAlreadyExistsException();
-        User newUser = User.builder().role(role).username(user.getUsername()).password(passwordEncoder.encode(user.getPassword())).build();
+        User newUser = User.builder().role(role).username(username).password(passwordEncoder.encode(password)).activated(true).build();
         return userRepository.save(newUser);
     }
 

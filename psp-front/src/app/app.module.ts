@@ -14,9 +14,13 @@ import { MatInputModule } from '@angular/material/input';
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 import { GettingStartedPageComponent } from './getting-started-page/getting-started-page.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms'
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { MatTableModule } from '@angular/material/table';
+import { AuthInterceptorService } from './auth-interceptor.service';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MerchantPageComponent } from './merchant-page/merchant-page.component';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,8 @@ import { MatTableModule } from '@angular/material/table';
     HomePageComponent,
     SignInPageComponent,
     GettingStartedPageComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    MerchantPageComponent
   ],
   imports: [
     BrowserModule,
@@ -40,9 +45,16 @@ import { MatTableModule } from '@angular/material/table';
     ReactiveFormsModule,
     MatIconModule,
     HttpClientModule,
-    MatTableModule
+    MatTableModule,
+    MatCheckboxModule,
+    MatSelectModule
   ],
-  providers: [],
+  providers: [AppComponent,
+    {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptorService,
+        multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

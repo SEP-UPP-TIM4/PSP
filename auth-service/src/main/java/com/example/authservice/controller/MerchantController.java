@@ -23,8 +23,10 @@ public class MerchantController {
     @PostMapping
     @ResponseStatus(value = HttpStatus.OK)
     public RegisterResponseDto add(@RequestBody RegisterRequestDto request) {
-        Merchant newMerchant = merchantService.register(request.getName());
-        return modelMapper.map(newMerchant, RegisterResponseDto.class);
+        Merchant newMerchant = merchantService.register(request.getName(), request.getUsername(), request.getPassword());
+        RegisterResponseDto responseDto = modelMapper.map(newMerchant, RegisterResponseDto.class);
+        responseDto.setUsername(newMerchant.getUser().getUsername());
+        return responseDto;
     }
 
 

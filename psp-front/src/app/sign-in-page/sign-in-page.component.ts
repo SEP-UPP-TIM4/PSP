@@ -30,6 +30,8 @@ export class SignInPageComponent {
       this.storageService.storeTokenData(data.jwtToken);
       if (this.storageService.getRoleFromToken() == 'ROLE_ADMIN') {
         this.router.navigateByUrl('/admin')
+      }else{
+        this.router.navigateByUrl('/merchant')
       }
     }, (err) => {
       alert("Not valid credentials");

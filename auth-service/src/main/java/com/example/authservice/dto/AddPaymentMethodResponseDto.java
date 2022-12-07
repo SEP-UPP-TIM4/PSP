@@ -13,4 +13,5 @@ public class AddPaymentMethodResponseDto {
     private Long id;
     private String name;
     private String url;
+    private boolean bankPayment;
 }

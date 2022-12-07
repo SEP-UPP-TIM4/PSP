@@ -14,7 +14,9 @@
                         <input matInput [(ngModel)]="newUrl">
                     </mat-form-field>
                 </td>
-
+                <td class="check-row">
+                    <mat-checkbox (change)="check($event)" class="example-margin">Bank payment?</mat-checkbox>
+                </td>
                 <td class="td-first-2">
                     <button mat-raised-button (click)="addData()" class="demo-button" style="width: 105%;">
                         Add data
@@ -44,6 +46,7 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr id="row" mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="selectedRow(row)"></tr>
+        <tr id="row" mat-row *matRowDef="let row; columns: displayedColumns;"
+            [ngClass]="{'highlight': selectedRowIndex == row.id}" (click)="selectedRow(row)"></tr>
     </table>
 </div>

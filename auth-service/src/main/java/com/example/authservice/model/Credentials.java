@@ -25,4 +25,9 @@ public class Credentials {
     @ManyToOne
     @JoinColumn
     private PaymentMethod paymentMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "bank_id")
+    private Bank bank;
+
 }

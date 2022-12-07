@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class AddPaymentMethodRequestDto {
     private String name;
     private String url;
+    private boolean bankPayment;
 }

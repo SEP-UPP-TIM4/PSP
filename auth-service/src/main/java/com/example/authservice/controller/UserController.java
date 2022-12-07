@@ -23,7 +23,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(value = HttpStatus.OK)
     public AddUserResponseDto add(@RequestBody AddUserDto addUserDto) {
-        User addedUser = userService.add(addUserDto);
+        User addedUser = userService.add(addUserDto.getUsername(), addUserDto.getPassword(), "ROLE_ADMIN");
         return modelMapper.map(addedUser, AddUserResponseDto.class);
     }
 
