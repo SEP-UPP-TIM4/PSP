@@ -3,6 +3,7 @@ package com.example.authservice.service;
 import com.example.authservice.dto.AddUserDto;
 import com.example.authservice.dto.JwtTokenDto;
 import com.example.authservice.dto.LoginUserDto;
+import com.example.authservice.exception.UserNotFoundException;
 import com.example.authservice.exception.UsernameAlreadyExistsException;
 import com.example.authservice.model.Role;
 import com.example.authservice.model.User;
@@ -54,6 +55,12 @@ public class UserService {
 
     private String getToken(User user) {
         return tokenUtils.generateToken(user.getUsername(), user.getRole().getName());
+    }
+
+    public User findByUsername(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        if(user.isEmpty()) throw new UserNotFoundException();
+        return user.get();
     }
 
 }

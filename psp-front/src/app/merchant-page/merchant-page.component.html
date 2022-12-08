@@ -5,13 +5,13 @@
                 <td class="td-first-1">
                     <mat-form-field class="example-full-width">
                         <mat-label>Username</mat-label>
-                        <input matInput [(ngModel)]="newName">
+                        <input matInput [(ngModel)]="newUsername">
                     </mat-form-field>
                 </td>
                 <td class="td-first-1">
                     <mat-form-field class="example-full-width">
                         <mat-label>Password</mat-label>
-                        <input matInput [(ngModel)]="newUrl" type="password">
+                        <input matInput [(ngModel)]="newPassword" type="password">
                     </mat-form-field>
                 </td>
                 
@@ -55,12 +55,12 @@
         <!-- Name Column -->
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef style="width: 33.3%;">Name</th>
-            <td mat-cell *matCellDef="let element">{{element.name}}</td>
+            <td mat-cell *matCellDef="let element">{{element.paymentMethod.name}}</td>
         </ng-container>
 
         <ng-container matColumnDef="bank">
             <th mat-header-cell *matHeaderCellDef style="width: 33.3%;">Bank</th>
-            <td mat-cell *matCellDef="let element">{{element.bank}}</td>
+            <td mat-cell *matCellDef="let element">{{element.bank.name}}</td>
         </ng-container>
 
         <ng-container matColumnDef="username">

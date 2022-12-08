@@ -5,15 +5,15 @@ import com.example.authservice.model.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import reactor.util.annotation.Nullable;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class AddCredentialsRequestDto {
+@Setter
+public class CredentialsDto {
+    private Long id;
     private String username;
-    private String password;
-    private Long paymentMethodId;
-    @Nullable
-    private Long bankId;
+    private Bank bank;
+    private PaymentMethod paymentMethod;
 }

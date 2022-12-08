@@ -27,7 +27,7 @@ public class BankController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    public List<BankDto> getPaymentMethods() {
+    public List<BankDto> getBanks() {
         return modelMapper.map(bankService.findAll(), new TypeToken<List<BankDto>>() {}.getType());
     }
 }

@@ -28,6 +28,12 @@ public class PaymentMethodService {
         return paymentMethodRepository.findAll();
     }
 
+    public PaymentMethod findById(Long id){
+        Optional<PaymentMethod> paymentMethod = paymentMethodRepository.findById(id);
+        if(paymentMethod.isEmpty()) throw new PaymentMethodNotFound();
+        return paymentMethod.get();
+    }
+
     public void delete(Long id){
         if(paymentMethodRepository.findById(id) != null)
             paymentMethodRepository.deleteById(id);

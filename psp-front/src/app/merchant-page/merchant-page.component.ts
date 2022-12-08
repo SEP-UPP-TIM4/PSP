@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
 import { AuthenticationService } from '../service/authentication.service';
 import { PaymentMethodDTO } from '../dto/PaymentMethodDTO';
+import { MerchantPaymentMethodDTO } from '../dto/MerchantPaymentMethodDTO';
 
 export interface PaymentMethod {
-  id: number,
-  name: string;
+  id: number;
   bankPayment: boolean;
+  name: string;
   bank: string;
   username: string;
 }
@@ -20,14 +21,14 @@ export interface PaymentMethod {
   styleUrls: ['./merchant-page.component.css']
 })
 export class MerchantPageComponent {
-  displayedColumns: string[] = ['name', 'bank', 'username'];
+  displayedColumns: string[] = ['name', 'username', 'bank'];
   dataToDisplay: PaymentMethod[] = [];
   allPaymentMethods: PaymentMethod[] = [];
   banks: any = [];
   methodSelected: any;
   bankSelected: any;
-  newName: string = '';
-  newUrl: string = '';
+  newUsername: string = '';
+  newPassword: string = '';
   selectedTableRow!: any;
   bankPayment: boolean = false;
   @ViewChild(MatTable) table!: MatTable<PaymentMethod>;
@@ -48,10 +49,13 @@ export class MerchantPageComponent {
     })
   }
 
-  selectionChanged(){
+  selectionChanged() {
     for (let i = 0; i < this.allPaymentMethods.length; i++) {
       if (this.allPaymentMethods[i].id === this.methodSelected) {
         this.bankPayment = this.allPaymentMethods[i].bankPayment;
+        if(!this.bankPayment){
+          this.bankSelected = '';
+        }
       }
     }
   }
@@ -64,7 +68,7 @@ export class MerchantPageComponent {
   }
 
   getMerchantPaymentMethods() {
-    this.authService.getPaymentMethods().subscribe((data: any) => {
+    this.authService.getMerchantPaymentMethods().subscribe((data: any) => {
       this.dataToDisplay = data;
       this.table.renderRows();
     })
@@ -80,11 +84,11 @@ export class MerchantPageComponent {
   }
 
   addData() {
-    let paymentMethodDTO: PaymentMethodDTO = { name: this.newName, url: this.newUrl, bankPayment: this.bankPayment };
-    this.authService.addPaymentMethod(paymentMethodDTO).subscribe((data: any) => {
+    let merchantPaymentMethodDTO: MerchantPaymentMethodDTO = { username: this.newUsername, password: this.newPassword, paymentMethodId: this.methodSelected, bankId: this.bankSelected };
+    this.authService.addPaymentMethodToMerchant(merchantPaymentMethodDTO).subscribe((data: any) => {
       this.getMerchantPaymentMethods();
-      this.newName = '';
-      this.newUrl = '';
+      this.newUsername = '';
+      this.newPassword = '';
     }, (err) => {
       alert("An error occurred, please try again...");
     })
@@ -93,7 +97,7 @@ export class MerchantPageComponent {
   removeData() {
     for (let i = 0; i < this.dataToDisplay.length; i++) {
       if (this.dataToDisplay[i].id === this.selectedTableRow.id) {
-        this.authService.deletePaymentMethod(this.dataToDisplay[i].id).subscribe((data: any) => {
+        this.authService.deleteMerchantCredentials(this.dataToDisplay[i].id).subscribe((data: any) => {
           this.getMerchantPaymentMethods();
         })
         break;

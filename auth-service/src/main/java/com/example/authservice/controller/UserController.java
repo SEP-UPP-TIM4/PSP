@@ -30,7 +30,6 @@ public class UserController {
     @PostMapping(value = "/login")
     @ResponseStatus(value = HttpStatus.OK)
     public JwtTokenDto login(@RequestBody LoginUserDto loginUserDto) {
-        JwtTokenDto tokenDto  = userService.login(loginUserDto);
-        return tokenDto;
+        return userService.login(loginUserDto);
     }
 }

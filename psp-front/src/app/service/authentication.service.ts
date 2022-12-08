@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginDTO } from "../dto/LoginDTO";
 import { PaymentMethodDTO } from "../dto/PaymentMethodDTO"
 import { RegistrationDTO } from "../dto/RegistrationDTO";
+import { MerchantPaymentMethodDTO } from "../dto/MerchantPaymentMethodDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AuthenticationService {
   private registrationUrl = "/merchant"
   private paymentMethodUrl = "/payment-method"
   private bankUrl = "/bank"
+  private credentialsUrl = "/credentials"
   
   constructor(private http: HttpClient) { }
 
@@ -30,6 +32,10 @@ export class AuthenticationService {
     return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.paymentMethodUrl}`)
   }
 
+  getMerchantPaymentMethods() {
+    return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.credentialsUrl}`)
+  }
+
   getBanks() {
     return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.bankUrl}`)
   }
@@ -38,7 +44,15 @@ export class AuthenticationService {
     return this.http.post(`${config.baseUrl}${this.authServiceUrl}${this.paymentMethodUrl}`, paymentMethodDTO);
   }
 
+  addPaymentMethodToMerchant(merchantPaymentMethodDTO: MerchantPaymentMethodDTO) {
+    return this.http.post(`${config.baseUrl}${this.authServiceUrl}${this.credentialsUrl}`, merchantPaymentMethodDTO);
+  }
+
   deletePaymentMethod(paymentMethodId: number) {
     return this.http.delete(`${config.baseUrl}${this.authServiceUrl}${this.paymentMethodUrl}/${paymentMethodId}`);
+  }
+
+  deleteMerchantCredentials(credentialsId: number) {
+    return this.http.delete(`${config.baseUrl}${this.authServiceUrl}${this.credentialsUrl}/${credentialsId}`);
   }
 }

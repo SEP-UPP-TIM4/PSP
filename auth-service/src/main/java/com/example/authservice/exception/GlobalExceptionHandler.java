@@ -27,6 +27,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(BankNotFoundException.class)
+    public ResponseEntity<Object> handleBankNotFound(BankNotFoundException exception) {
+        ExceptionResponse response = getExceptionResponse(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(MerchantNotFoundException.class)
+    public ResponseEntity<Object> handleMerchantNotFoundExceptionException(MerchantNotFoundException exception) {
+        ExceptionResponse response = getExceptionResponse(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception) {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());

@@ -64,7 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests().antMatchers("/api/v1/users/**").permitAll()
                 .antMatchers("/api/v1/users").permitAll()// /auth/**
-                .antMatchers("/api/v1/credentials").permitAll()// /auth/**
                 .antMatchers("/api/v1/merchant").permitAll()
                 .antMatchers("/api/v1/payment-method").permitAll()
                 .antMatchers("/api/v1/bank").permitAll()
@@ -82,7 +81,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/users");
         web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/users/login");
-        web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/credentials");
         web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/merchant");
         web.ignoring().antMatchers(HttpMethod.GET, "/api/v1/payment-method");
         web.ignoring().antMatchers(HttpMethod.GET, "/api/v1/bank");
