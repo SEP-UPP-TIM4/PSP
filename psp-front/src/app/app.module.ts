@@ -21,6 +21,7 @@ import { AuthInterceptorService } from './auth-interceptor.service';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MerchantPageComponent } from './merchant-page/merchant-page.component';
 import {MatSelectModule} from '@angular/material/select';
+import { AuthGuard } from './auth-guard.guard';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {MatSelectModule} from '@angular/material/select';
         provide: HTTP_INTERCEPTORS,
         useClass: AuthInterceptorService,
         multi: true
-    }],
+    },
+    AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

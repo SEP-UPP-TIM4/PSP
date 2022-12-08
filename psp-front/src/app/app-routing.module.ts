@@ -5,8 +5,9 @@ import { GettingStartedPageComponent } from './getting-started-page/getting-star
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { MerchantPageComponent } from './merchant-page/merchant-page.component';
+import { AuthGuard } from './auth-guard.guard';
 
-const routes: Routes = [{path: '', component: HomePageComponent},
+const routes: Routes = [{path: ':id', component: HomePageComponent, canActivate:[AuthGuard], runGuardsAndResolvers:'always'},
                         {path: 'sign-in', component: SignInPageComponent},
                         {path: 'getting-started', component: GettingStartedPageComponent},
                         {path: 'admin', component: AdminPageComponent},
