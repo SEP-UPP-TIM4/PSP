@@ -67,6 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/merchant").permitAll()
                 .antMatchers("/api/v1/payment-method").permitAll()
                 .antMatchers("/api/v1/bank").permitAll()
+                .antMatchers("/api/v1/payment-request").permitAll()
                 .anyRequest().authenticated().and()
 
                 .cors().and()
@@ -82,6 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/users");
         web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/users/login");
         web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/merchant");
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/payment-request");
         web.ignoring().antMatchers(HttpMethod.GET, "/api/v1/payment-method");
         web.ignoring().antMatchers(HttpMethod.GET, "/api/v1/bank");
 
