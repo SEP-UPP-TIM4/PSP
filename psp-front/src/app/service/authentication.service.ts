@@ -17,6 +17,8 @@ export class AuthenticationService {
   private paymentMethodUrl = "/payment-method"
   private bankUrl = "/bank"
   private credentialsUrl = "/credentials"
+  private paymentRequestUrl = "/payment-request"
+  private processPaymentUrl = "/process-payment"
   
   constructor(private http: HttpClient) { }
 
@@ -30,6 +32,10 @@ export class AuthenticationService {
 
   getPaymentMethods() {
     return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.paymentMethodUrl}`)
+  }
+
+  getPaymentMethodsForClient(id: number) {
+    return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.credentialsUrl}${this.paymentRequestUrl}/${id}`)
   }
 
   getMerchantPaymentMethods() {
@@ -54,5 +60,9 @@ export class AuthenticationService {
 
   deleteMerchantCredentials(credentialsId: number) {
     return this.http.delete(`${config.baseUrl}${this.authServiceUrl}${this.credentialsUrl}/${credentialsId}`);
+  }
+
+  processPayment(paymentMethodId: number, paymentRequestId: number) {
+    return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.credentialsUrl}${this.processPaymentUrl}/payment-method/${paymentMethodId}/payment-request/${paymentRequestId}`);
   }
 }

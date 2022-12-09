@@ -1,6 +1,6 @@
 package com.example.authservice.service;
 
-import com.example.authservice.exception.BankNotFoundException;
+import com.example.authservice.exception.NotFoundException;
 import com.example.authservice.model.Bank;
 import com.example.authservice.repository.BankRepository;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class BankService {
     public Bank findById(Long id){
         if(id != null) {
             Optional<Bank> bank = bankRepository.findById(id);
-            if (bank.isEmpty()) throw new BankNotFoundException();
+            if (bank.isEmpty()) throw new NotFoundException(Bank.class.getSimpleName());
             return bank.get();
         }
         return null;

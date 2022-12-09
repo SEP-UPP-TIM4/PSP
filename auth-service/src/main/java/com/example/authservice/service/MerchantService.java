@@ -1,8 +1,8 @@
 package com.example.authservice.service;
 
 import com.example.authservice.exception.BadCredentialsException;
-import com.example.authservice.exception.MerchantNotFoundException;
 import com.example.authservice.exception.NameAlreadyExistsException;
+import com.example.authservice.exception.NotFoundException;
 import com.example.authservice.model.Merchant;
 import com.example.authservice.model.User;
 import com.example.authservice.repository.MerchantRepository;
@@ -44,7 +44,7 @@ public class MerchantService {
 
     public Merchant findByUserId(Long id){
         Optional<Merchant> merchant = merchantRepository.findByUserId(id);
-        if(merchant.isEmpty()) throw new MerchantNotFoundException();
+        if(merchant.isEmpty()) throw new NotFoundException(Merchant.class.getSimpleName());
         return merchant.get();
     }
 

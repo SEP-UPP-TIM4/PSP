@@ -2,6 +2,7 @@ package com.example.authservice.controller;
 
 import com.example.authservice.dto.AddPaymentMethodRequestDto;
 import com.example.authservice.dto.AddPaymentMethodResponseDto;
+import com.example.authservice.dto.MerchantPaymentMethodsDto;
 import com.example.authservice.dto.NewQRCodeDto;
 import com.example.authservice.model.PaymentMethod;
 import com.example.authservice.service.PaymentMethodService;

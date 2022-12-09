@@ -11,7 +11,7 @@ export interface PaymentMethod {
   id: number;
   bankPayment: boolean;
   name: string;
-  bank: string;
+  bankName: string;
   username: string;
 }
 

@@ -1,9 +1,8 @@
 package com.example.authservice.service;
 
-import com.example.authservice.dto.AddUserDto;
 import com.example.authservice.dto.JwtTokenDto;
 import com.example.authservice.dto.LoginUserDto;
-import com.example.authservice.exception.UserNotFoundException;
+import com.example.authservice.exception.NotFoundException;
 import com.example.authservice.exception.UsernameAlreadyExistsException;
 import com.example.authservice.model.Role;
 import com.example.authservice.model.User;
@@ -59,7 +58,7 @@ public class UserService {
 
     public User findByUsername(String username){
         Optional<User> user = userRepository.findByUsername(username);
-        if(user.isEmpty()) throw new UserNotFoundException();
+        if(user.isEmpty()) throw new NotFoundException(User.class.getSimpleName());
         return user.get();
     }
 

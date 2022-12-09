@@ -1,5 +1,6 @@
 package com.example.authservice.controller;
 
+import com.example.authservice.dto.PaymentDataDto;
 import com.example.authservice.dto.PaymentRequestDto;
 import com.example.authservice.model.PaymentRequest;
 import com.example.authservice.service.PaymentRequestService;
@@ -29,6 +30,7 @@ public class PaymentRequestController {
         PaymentRequest paymentRequest = paymentRequestService.save(modelMapper.map(request, PaymentRequest.class));
         modelMapper.map(paymentRequest, PaymentRequestDto.class);
 
-        return "http://localhost:4200/" + paymentRequest.getId();
+        return "http://localhost:4200/process-payment/" + paymentRequest.getId();
     }
+
 }

@@ -1,6 +1,6 @@
 package com.example.authservice.service;
 
-import com.example.authservice.exception.UserNotFoundException;
+import com.example.authservice.exception.NotFoundException;
 import com.example.authservice.model.User;
 import com.example.authservice.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
-            throw new UserNotFoundException();
+            throw new NotFoundException(User.class.getSimpleName());
         } else {
             return user.get();
         }
@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
-            throw new UserNotFoundException();
+            throw new NotFoundException(User.class.getSimpleName());
         } else {
             return user.get();
         }

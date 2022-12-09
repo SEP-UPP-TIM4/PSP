@@ -1,0 +1,14 @@
+<div class="payment-methods">
+    <table mat-table [dataSource]="dataToDisplay" class="mat-elevation-z8 demo-table" style="width: 220%;">
+        <!-- Name Column -->
+        <ng-container matColumnDef="paymentName">
+            <th mat-header-cell *matHeaderCellDef style="width: 50%;">Payment name</th>
+            <td mat-cell *matCellDef="let element">{{element.paymentName}}
+                <button mat-raised-button color="primary" style="display: flex; float: right;" (click)="pay(element.paymentMethodId, element.paymentRequestId)">Pay</button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr id="row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>

@@ -1,16 +1,15 @@
 package com.example.authservice.service;
 
 import com.example.authservice.dto.AddCredentialsRequestDto;
-import com.example.authservice.exception.MerchantNotFoundException;
+import com.example.authservice.dto.PaymentDataDto;
 import com.example.authservice.model.*;
 import com.example.authservice.repository.CredentialsRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class CredentialsService {
@@ -21,13 +20,15 @@ public class CredentialsService {
     private final UserService userService;
     private final BankService bankService;
     private final PaymentMethodService paymentMethodService;
+    private final PaymentRequestService paymentRequestService;
 
-    public CredentialsService(MerchantService merchantService, CredentialsRepository credentialsRepository, UserService userService, BankService bankService, PaymentMethodService paymentMethodService) {
+    public CredentialsService(MerchantService merchantService, CredentialsRepository credentialsRepository, UserService userService, BankService bankService, PaymentMethodService paymentMethodService, PaymentRequestService paymentRequestService) {
         this.merchantService = merchantService;
         this.credentialsRepository = credentialsRepository;
         this.userService = userService;
         this.bankService = bankService;
         this.paymentMethodService = paymentMethodService;
+        this.paymentRequestService = paymentRequestService;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -54,8 +55,27 @@ public class CredentialsService {
                 merchantService.findByUserId(userService.findByUsername(username).getId()).getId());
     }
 
+    public Set<Credentials> findByMerchantId(UUID id){
+        return credentialsRepository.findByMerchantId(id);
+    }
+
     public void delete(Long id){
         credentialsRepository.deleteById(id);
+    }
+
+    public Set<Credentials> findByPaymentRequest(Long id){
+        PaymentRequest paymentRequest = paymentRequestService.findById(id);
+        return credentialsRepository.findByMerchantId(merchantService.findByApiKey(paymentRequest.getApiKey()).getId());
+
+    }
+
+    public PaymentDataDto findPaymentData(Long paymentMethodId, Long paymentRequestId){
+        PaymentRequest paymentRequest = paymentRequestService.findById(paymentRequestId);
+        Credentials credentialsForMethod = findByPaymentRequest(paymentRequestId).stream()
+                .filter(credential -> credential.getPaymentMethod().getId().equals(paymentMethodId))
+                .findFirst().orElse(null);
+        return new PaymentDataDto(credentialsForMethod.getUsername(), credentialsForMethod.getPassword(), paymentRequest.getAmount(),
+                                    paymentRequest.getSuccessUrl(), paymentRequest.getFailedUrl(), paymentRequest.getErrorUrl(), credentialsForMethod.getPaymentMethod().getUrl());
     }
 
 }

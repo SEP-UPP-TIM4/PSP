@@ -1,9 +1,7 @@
 package com.example.authservice.controller;
 
-import com.example.authservice.dto.AddCredentialsRequestDto;
-import com.example.authservice.dto.AddCredentialsResponseDto;
-import com.example.authservice.dto.AddPaymentMethodResponseDto;
-import com.example.authservice.dto.CredentialsDto;
+import com.example.authservice.dto.*;
+import com.example.authservice.mapper.CredentialsMapper;
 import com.example.authservice.model.Credentials;
 import com.example.authservice.service.CredentialsService;
 import org.modelmapper.ModelMapper;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/v1/credentials")
@@ -47,7 +46,17 @@ public class CredentialsController {
     public List<CredentialsDto> getPaymentMethods() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
-        return modelMapper.map(credentialsService.findAll(username), new TypeToken<List<CredentialsDto>>() {}.getType());
+        return credentialsService.findAll(username).stream()
+                .map(credential -> CredentialsMapper.CredentialsToCredentialsDto(credential)).collect(Collectors.toList());
+
+    }
+
+    @GetMapping(value = "/payment-request/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<PaymentProcessingDto> getByPaymentRequest(@PathVariable Long id) {
+        return credentialsService.findByPaymentRequest(id).stream()
+                .map(credential -> CredentialsMapper.CredentialsToPaymentProcessingDto(credential, id)).collect(Collectors.toList());
+
     }
 
     @DeleteMapping(value = "/{id}")
@@ -57,6 +66,11 @@ public class CredentialsController {
         credentialsService.delete(id);
     }
 
+    @GetMapping(value = "/process-payment/payment-method/{paymentMethodId}/payment-request/{paymentRequestId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public PaymentDataDto getProcessPaymentData(@PathVariable Long paymentMethodId, @PathVariable Long paymentRequestId){
+        return credentialsService.findPaymentData(paymentMethodId, paymentRequestId);
+    }
 
     public String getAuthHeaderFromHeader(HttpServletRequest request) {
         return request.getHeader(AUTH_HEADER);

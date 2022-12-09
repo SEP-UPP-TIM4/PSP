@@ -1,7 +1,5 @@
 package com.example.authservice.dto;
 
-import com.example.authservice.model.Bank;
-import com.example.authservice.model.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CredentialsDto {
+public class MerchantPaymentMethodsDto {
     private Long id;
-    private String username;
-    private String bankName;
-    private PaymentMethod paymentMethod;
+    private Long paymentRequestId;
+    private String name;
+    private String url;
+    private boolean bankPayment;
 }

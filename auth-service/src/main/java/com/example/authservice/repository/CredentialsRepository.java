@@ -13,4 +13,6 @@ public interface CredentialsRepository extends JpaRepository<Credentials, Long> 
     @Query(value = "SELECT * FROM credentials WHERE merchant_id=?1", nativeQuery = true)
     Set<Credentials> findByMerchantId(UUID id);
 
+    @Query(value = "SELECT * FROM credentials WHERE payment_method_id=?1", nativeQuery = true)
+    Credentials findByPaymentMethod(Long id);
 }

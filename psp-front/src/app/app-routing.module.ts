@@ -5,12 +5,14 @@ import { GettingStartedPageComponent } from './getting-started-page/getting-star
 import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { MerchantPageComponent } from './merchant-page/merchant-page.component';
+import { ProcessPaymentPageComponent } from './process-payment-page/process-payment-page.component';
 
 const routes: Routes = [{path: '', component: HomePageComponent},
                         {path: 'sign-in', component: SignInPageComponent},
                         {path: 'getting-started', component: GettingStartedPageComponent},
                         {path: 'admin', component: AdminPageComponent},
-                        {path: 'merchant', component: MerchantPageComponent}
+                        {path: 'merchant', component: MerchantPageComponent},
+                        {path: 'process-payment/:id', component: ProcessPaymentPageComponent},
                       ];
 
 @NgModule({

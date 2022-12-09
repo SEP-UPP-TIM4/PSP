@@ -1,7 +1,7 @@
 package com.example.authservice.service;
 
 import com.example.authservice.exception.NameAlreadyExistsException;
-import com.example.authservice.exception.PaymentMethodNotFound;
+import com.example.authservice.exception.NotFoundException;
 import com.example.authservice.model.PaymentMethod;
 import com.example.authservice.repository.PaymentMethodRepository;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class PaymentMethodService {
 
     public PaymentMethod findById(Long id){
         Optional<PaymentMethod> paymentMethod = paymentMethodRepository.findById(id);
-        if(paymentMethod.isEmpty()) throw new PaymentMethodNotFound();
+        if(paymentMethod.isEmpty()) throw new NotFoundException(PaymentMethod.class.getSimpleName());
         return paymentMethod.get();
     }
 
@@ -38,6 +38,8 @@ public class PaymentMethodService {
         if(paymentMethodRepository.findById(id) != null)
             paymentMethodRepository.deleteById(id);
         else
-            throw new PaymentMethodNotFound();
+            throw new NotFoundException(PaymentMethod.class.getSimpleName());
     }
+
+
 }
