@@ -3,9 +3,11 @@ package com.example.authservice.security.config.auth;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Objects;
+import java.io.Serial;
+
 public class TokenBasedAuthentication extends AbstractAuthenticationToken {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private String token;
@@ -14,10 +16,6 @@ public class TokenBasedAuthentication extends AbstractAuthenticationToken {
     public TokenBasedAuthentication(UserDetails principle) {
         super(principle.getAuthorities());
         this.principle = principle;
-    }
-
-    public String getToken() {
-        return token;
     }
 
     public void setToken(String token) {

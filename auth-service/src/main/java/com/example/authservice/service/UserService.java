@@ -20,11 +20,12 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private  final TokenUtils tokenUtils;
+    private final TokenUtils tokenUtils;
 
     public UserService(UserRepository userRepository, RoleService roleService, AuthenticationManager authenticationManager, TokenUtils tokenUtils) {
         this.userRepository = userRepository;

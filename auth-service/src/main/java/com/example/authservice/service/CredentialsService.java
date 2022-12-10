@@ -2,6 +2,7 @@ package com.example.authservice.service;
 
 import com.example.authservice.dto.AddCredentialsRequestDto;
 import com.example.authservice.dto.PaymentDataDto;
+import com.example.authservice.exception.NotFoundException;
 import com.example.authservice.model.*;
 import com.example.authservice.repository.CredentialsRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
-import java.util.UUID;
 
 @Service
 public class CredentialsService {
@@ -22,7 +22,10 @@ public class CredentialsService {
     private final PaymentMethodService paymentMethodService;
     private final PaymentRequestService paymentRequestService;
 
-    public CredentialsService(MerchantService merchantService, CredentialsRepository credentialsRepository, UserService userService, BankService bankService, PaymentMethodService paymentMethodService, PaymentRequestService paymentRequestService) {
+    public CredentialsService(MerchantService merchantService, CredentialsRepository credentialsRepository,
+                              UserService userService, BankService bankService,
+                              PaymentMethodService paymentMethodService,
+                              PaymentRequestService paymentRequestService) {
         this.merchantService = merchantService;
         this.credentialsRepository = credentialsRepository;
         this.userService = userService;
@@ -35,16 +38,12 @@ public class CredentialsService {
     public Credentials add(AddCredentialsRequestDto addCredentialsRequestDto, String username){
         Merchant merchant = merchantService.findByUserId(userService.findByUsername(username).getId());
         PaymentMethod paymentMethod = paymentMethodService.findById(addCredentialsRequestDto.getPaymentMethodId());
-        Credentials credentials;
-        Bank bank = bankService.findById(addCredentialsRequestDto.getBankId());
-        if(bank == null) {
-            credentials = Credentials.builder().username(addCredentialsRequestDto.getUsername())
-                    .password(passwordEncoder.encode(addCredentialsRequestDto.getPassword()))
-                    .paymentMethod(paymentMethod).build();
-        }else {
-            credentials = Credentials.builder().username(addCredentialsRequestDto.getUsername())
-                    .password(passwordEncoder.encode(addCredentialsRequestDto.getPassword()))
-                    .paymentMethod(paymentMethod).bank(bank).build();
+        Credentials credentials = Credentials.builder().username(addCredentialsRequestDto.getUsername())
+                .password(passwordEncoder.encode(addCredentialsRequestDto.getPassword()))
+                .paymentMethod(paymentMethod).build();
+        if(addCredentialsRequestDto.getBankId() != null) {
+            Bank bank = bankService.findById(addCredentialsRequestDto.getBankId());
+            credentials.setBank(bank);
         }
         merchant.getCredentials().add(credentials);
         return credentialsRepository.save(credentials);
@@ -53,10 +52,6 @@ public class CredentialsService {
     public Set<Credentials> findAll(String username){
         return credentialsRepository.findByMerchantId(
                 merchantService.findByUserId(userService.findByUsername(username).getId()).getId());
-    }
-
-    public Set<Credentials> findByMerchantId(UUID id){
-        return credentialsRepository.findByMerchantId(id);
     }
 
     public void delete(Long id){
@@ -73,9 +68,10 @@ public class CredentialsService {
         PaymentRequest paymentRequest = paymentRequestService.findById(paymentRequestId);
         Credentials credentialsForMethod = findByPaymentRequest(paymentRequestId).stream()
                 .filter(credential -> credential.getPaymentMethod().getId().equals(paymentMethodId))
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow(() -> new NotFoundException(Credentials.class.getSimpleName()));
         return new PaymentDataDto(credentialsForMethod.getUsername(), credentialsForMethod.getPassword(), paymentRequest.getAmount(),
-                                    paymentRequest.getSuccessUrl(), paymentRequest.getFailedUrl(), paymentRequest.getErrorUrl(), credentialsForMethod.getPaymentMethod().getUrl());
+                paymentRequest.getSuccessUrl(), paymentRequest.getFailedUrl(), paymentRequest.getErrorUrl(),
+                credentialsForMethod.getPaymentMethod().getUrl());
     }
 
 }

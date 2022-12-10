@@ -18,9 +18,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     public WebSecurityConfig(CustomUserDetailsService customUserDetailsService, RestAuthenticationEntryPoint restAuthenticationEntryPoint, TokenUtils tokenUtils) {
         this.customUserDetailsService = customUserDetailsService;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
@@ -28,13 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-
-
     private final PasswordEncoder passwordEncoder;
 
     private final CustomUserDetailsService customUserDetailsService;
 
-    // Handler za vracanje 401 kada klijent sa neodogovarajucim korisnickim imenom i lozinkom pokusa da pristupi resursu
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Bean
@@ -49,9 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder);
     }
-
-
-
 
     private final TokenUtils tokenUtils;
 

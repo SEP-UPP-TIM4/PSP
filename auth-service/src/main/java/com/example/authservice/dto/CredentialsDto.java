@@ -1,6 +1,5 @@
 package com.example.authservice.dto;
 
-import com.example.authservice.model.Bank;
 import com.example.authservice.model.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

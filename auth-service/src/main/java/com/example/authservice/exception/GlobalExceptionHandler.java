@@ -15,12 +15,12 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<Object> handleUsernameAlreadyExists(UsernameAlreadyExistsException exception) {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
-
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> handleBankNotFound(NotFoundException exception) {
@@ -33,6 +33,7 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
+
     private ExceptionResponse getExceptionResponse(String message) {
         ExceptionResponse response = new ExceptionResponse();
         response.setDateTime(LocalDateTime.now());

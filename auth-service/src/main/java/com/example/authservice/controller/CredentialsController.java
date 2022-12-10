@@ -5,14 +5,12 @@ import com.example.authservice.mapper.CredentialsMapper;
 import com.example.authservice.model.Credentials;
 import com.example.authservice.service.CredentialsService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +26,6 @@ public class CredentialsController {
 
         this.credentialsService = credentialsService;
     }
-
 
     @PostMapping
     @PreAuthorize("hasRole('MERCHANT')")
@@ -47,7 +44,7 @@ public class CredentialsController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
         return credentialsService.findAll(username).stream()
-                .map(credential -> CredentialsMapper.CredentialsToCredentialsDto(credential)).collect(Collectors.toList());
+                .map(CredentialsMapper::CredentialsToCredentialsDto).collect(Collectors.toList());
 
     }
 
@@ -70,9 +67,5 @@ public class CredentialsController {
     @ResponseStatus(value = HttpStatus.OK)
     public PaymentDataDto getProcessPaymentData(@PathVariable Long paymentMethodId, @PathVariable Long paymentRequestId){
         return credentialsService.findPaymentData(paymentMethodId, paymentRequestId);
-    }
-
-    public String getAuthHeaderFromHeader(HttpServletRequest request) {
-        return request.getHeader(AUTH_HEADER);
     }
 }

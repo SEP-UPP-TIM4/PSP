@@ -19,12 +19,7 @@ public class BankService {
     }
 
     public Bank findById(Long id){
-        if(id != null) {
-            Optional<Bank> bank = bankRepository.findById(id);
-            if (bank.isEmpty()) throw new NotFoundException(Bank.class.getSimpleName());
-            return bank.get();
-        }
-        return null;
+        return bankRepository.findById(id).orElseThrow(() -> new NotFoundException(Bank.class.getSimpleName()));
     }
     public List<Bank> findAll(){
         return bankRepository.findAll();

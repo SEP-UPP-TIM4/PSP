@@ -35,10 +35,8 @@ public class PaymentMethodService {
     }
 
     public void delete(Long id){
-        if(paymentMethodRepository.findById(id) != null)
-            paymentMethodRepository.deleteById(id);
-        else
-            throw new NotFoundException(PaymentMethod.class.getSimpleName());
+        paymentMethodRepository.findById(id).orElseThrow(() -> new NotFoundException(PaymentMethod.class.getSimpleName()));
+        paymentMethodRepository.deleteById(id);
     }
 
 

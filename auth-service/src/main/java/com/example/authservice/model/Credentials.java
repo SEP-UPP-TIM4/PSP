@@ -28,6 +28,7 @@ public class Credentials {
 
     @ManyToOne
     @JoinColumn(name = "bank_id")
+    @Setter
     private Bank bank;
 
 }

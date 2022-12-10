@@ -1,7 +1,7 @@
 package com.example.authservice.controller;
 
-import com.example.authservice.dto.RegisterResponseDto;
 import com.example.authservice.dto.RegisterRequestDto;
+import com.example.authservice.dto.RegisterResponseDto;
 import com.example.authservice.model.Merchant;
 import com.example.authservice.service.MerchantService;
 import org.modelmapper.ModelMapper;

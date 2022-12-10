@@ -1,14 +1,14 @@
 package com.example.authservice.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 public class PaymentDataDto {
     private String merchantId; //u bazi string a ovdje uuid?

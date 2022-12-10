@@ -1,6 +1,5 @@
 package com.example.authservice.controller;
 
-import com.example.authservice.dto.AddPaymentMethodResponseDto;
 import com.example.authservice.dto.BankDto;
 import com.example.authservice.service.BankService;
 import org.modelmapper.ModelMapper;

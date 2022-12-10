@@ -31,7 +31,6 @@ public class PaymentMethodController {
         this.restTemplate = restTemplate;
     }
 
-
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(value = HttpStatus.OK)
