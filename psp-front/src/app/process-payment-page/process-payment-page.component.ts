@@ -21,7 +21,13 @@ export class ProcessPaymentPageComponent {
   @ViewChild(MatTable) table!: MatTable<PaymentMethod>;
 
   selectedRowIndex = -1;
-  
+
+  apiKey: string = '';
+  amount: number = 0;
+  successUrl: string = '';
+  failedUrl: string = '';
+  errorUrl: string = '';
+    
   constructor(private authService: AuthenticationService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -29,6 +35,7 @@ export class ProcessPaymentPageComponent {
     if(idString != null){
       var id: number = +idString;
       this.getPaymentMethods(id);
+      this.getPaymentRequestData(id);
     }else{
       alert("An error occured...")
     }
@@ -38,6 +45,17 @@ export class ProcessPaymentPageComponent {
     this.authService.getPaymentMethodsForClient(id).subscribe((data: any) => {
       this.dataToDisplay = data;
       this.table.renderRows();
+    })
+  }
+
+  getPaymentRequestData(id: number) {
+    this.authService.getPaymentrequestData(id).subscribe((data: any) => {
+      this.apiKey = data.apiKey;
+      this.amount = data.amount;
+      this.successUrl = data.successUrl;
+      this.failedUrl = data.failedUrl;
+      this.errorUrl = data.errorUrl;
+      alert(this.apiKey + "|" + this.amount + "|" + this.successUrl + "|" + this.failedUrl + "|" + this.errorUrl);
     })
   }
 

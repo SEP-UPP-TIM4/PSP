@@ -1,4 +1,4 @@
-package com.example.authservice.model;
+package com.psp.creditcardservice.model;
 
 import lombok.*;
 
@@ -14,6 +14,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bank {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

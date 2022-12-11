@@ -1,8 +1,8 @@
 package com.example.authservice.security.config;
 
-import com.example.authservice.security.config.auth.RestAuthenticationEntryPoint;
-import com.example.authservice.security.config.auth.TokenAuthenticationFilter;
-import com.example.authservice.security.config.util.TokenUtils;
+import com.example.authservice.security.auth.TokenAuthenticationFilter;
+import com.example.authservice.security.auth.RestAuthenticationEntryPoint;
+import com.example.authservice.security.util.TokenUtils;
 import com.example.authservice.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -65,6 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/payment-method").permitAll()
                 .antMatchers("/api/v1/bank").permitAll()
                 .antMatchers("/api/v1/payment-request").permitAll()
+                .antMatchers("/api/v1/payment-request/**").permitAll()
                 .antMatchers("/api/v1/credentials/payment-request/**").permitAll()
                 .antMatchers("/api/v1/credentials/process-payment/**").permitAll()
                 .anyRequest().authenticated().and()

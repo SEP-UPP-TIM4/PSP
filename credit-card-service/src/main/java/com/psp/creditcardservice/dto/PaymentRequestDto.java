@@ -1,18 +1,15 @@
-package com.example.authservice.dto;
+package com.psp.creditcardservice.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
-public class PaymentDataDto {
-
-    private String apiKey;
+public class PaymentRequestDto {
 
     private BigDecimal amount;
 

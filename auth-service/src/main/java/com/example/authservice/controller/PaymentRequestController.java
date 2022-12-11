@@ -1,14 +1,13 @@
 package com.example.authservice.controller;
 
+import com.example.authservice.dto.PaymentDataDto;
 import com.example.authservice.dto.PaymentRequestDto;
 import com.example.authservice.model.PaymentRequest;
 import com.example.authservice.service.PaymentRequestService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -32,6 +31,12 @@ public class PaymentRequestController {
         modelMapper.map(paymentRequest, PaymentRequestDto.class);
 
         return "http://localhost:4200/process-payment/" + paymentRequest.getId();
+    }
+
+    @GetMapping(value = "/{paymentRequestId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public PaymentDataDto getProcessPaymentData(@PathVariable Long paymentRequestId){
+        return paymentRequestService.getPaymentRequestForId(paymentRequestId);
     }
 
 }

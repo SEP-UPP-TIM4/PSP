@@ -65,4 +65,8 @@ export class AuthenticationService {
   processPayment(paymentMethodId: number, paymentRequestId: number) {
     return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.credentialsUrl}${this.processPaymentUrl}/payment-method/${paymentMethodId}/payment-request/${paymentRequestId}`);
   }
+
+  getPaymentrequestData(paymentRequestId: number) {
+    return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.paymentRequestUrl}/${paymentRequestId}`)
+  }
 }

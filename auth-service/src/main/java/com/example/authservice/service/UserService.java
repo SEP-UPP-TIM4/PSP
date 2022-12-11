@@ -7,7 +7,7 @@ import com.example.authservice.exception.UsernameAlreadyExistsException;
 import com.example.authservice.model.Role;
 import com.example.authservice.model.User;
 import com.example.authservice.repository.UserRepository;
-import com.example.authservice.security.config.util.TokenUtils;
+import com.example.authservice.security.util.TokenUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

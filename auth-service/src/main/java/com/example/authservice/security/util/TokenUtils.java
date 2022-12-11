@@ -1,4 +1,4 @@
-package com.example.authservice.security.config.util;
+package com.example.authservice.security.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

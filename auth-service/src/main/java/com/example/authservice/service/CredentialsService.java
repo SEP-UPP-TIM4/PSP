@@ -64,14 +64,4 @@ public class CredentialsService {
 
     }
 
-    public PaymentDataDto findPaymentData(Long paymentMethodId, Long paymentRequestId){
-        PaymentRequest paymentRequest = paymentRequestService.findById(paymentRequestId);
-        Credentials credentialsForMethod = findByPaymentRequest(paymentRequestId).stream()
-                .filter(credential -> credential.getPaymentMethod().getId().equals(paymentMethodId))
-                .findFirst().orElseThrow(() -> new NotFoundException(Credentials.class.getSimpleName()));
-        return new PaymentDataDto(credentialsForMethod.getUsername(), credentialsForMethod.getPassword(), paymentRequest.getAmount(),
-                paymentRequest.getSuccessUrl(), paymentRequest.getFailedUrl(), paymentRequest.getErrorUrl(),
-                credentialsForMethod.getPaymentMethod().getUrl());
-    }
-
 }

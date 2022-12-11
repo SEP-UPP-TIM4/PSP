@@ -62,10 +62,4 @@ public class CredentialsController {
     public void deletePaymentMethod(@PathVariable Long id){
         credentialsService.delete(id);
     }
-
-    @GetMapping(value = "/process-payment/payment-method/{paymentMethodId}/payment-request/{paymentRequestId}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public PaymentDataDto getProcessPaymentData(@PathVariable Long paymentMethodId, @PathVariable Long paymentRequestId){
-        return credentialsService.findPaymentData(paymentMethodId, paymentRequestId);
-    }
 }

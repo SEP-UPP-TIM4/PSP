@@ -1,6 +1,6 @@
-package com.example.authservice.security.config.auth;
+package com.example.authservice.security.auth;
 
-import com.example.authservice.security.config.util.TokenUtils;
+import com.example.authservice.security.util.TokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
