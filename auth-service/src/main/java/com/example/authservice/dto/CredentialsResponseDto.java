@@ -14,4 +14,6 @@ public class CredentialsResponseDto {
     private String username;
 
     private String password;
+
+    private String bankUrl;
 }

@@ -1,7 +1,6 @@
 package com.apigateway.filter;
 
 import com.apigateway.dto.CredentialsDto;
-import com.apigateway.dto.PaymentDataDto;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.http.HttpHeaders;
@@ -19,72 +18,35 @@ public class AuthFilter implements GlobalFilter {
         this.webClientBuilder = webClientBuilder;
     }
 
-//    @Override
-//    public Mono<Void> filter(
-//            ServerWebExchange exchange,
-//            GatewayFilterChain chain) {
-//
-//            if(!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-//                throw new RuntimeException("Missing auth information");
-//            }
-//
-//            // filter by request path
-//            if(exchange.getRequest().getMethod().matches("**/add")) {
-//                return chain.filter(exchange);
-//            }
-//
-//            String token = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-//
-//            return webClientBuilder.build()
-//                    .post()
-//                    .uri("http://AUTH-SERVICE/api/v1/auth/validateToken?token=" + token)
-//                    .retrieve().bodyToMono(CredentialsDto.class)
-//                    .map(credentialsDto -> {
-////                        exchange.getRequest()
-////                                .mutate()
-////                                .build().getBody().
-//                        System.out.println(credentialsDto);
-//                        exchange.getRequest()
-//                                .mutate()
-//                                .header("x-auth-user-id", String.valueOf(credentialsDto.getUsername()));
-//                        return exchange;
-//                    }).flatMap(chain::filter);
-//    }
 
     @Override
     public Mono<Void> filter(
             ServerWebExchange exchange,
             GatewayFilterChain chain) {
 
-        // filter by request path
-        if(!exchange.getRequest().getURI().getPath().contains("/process-payment")) {
+
+        if(!exchange.getRequest().getURI().getPath().contains("/payment/")) {
             return chain.filter(exchange);
         }
-        //ovdje pozvati auth da dobijes podatke (end point u credentials) i proslijediti dalje
-        return null;
-        /*webClientBuilder.build()
-                .get()
-                .uri(exchange.getRequest().getURI())
-                .retrieve().bodyToMono(PaymentDataDto.class)
-                .map(paymentDataDto -> {
-                    System.out.println(paymentDataDto);
 
-                    return exchange;
-                }).flatMap(chain::filter);
+        String token = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+
+        String methodId = exchange.getAttribute("methodId");
+
+        System.out.println(methodId);
 
         return webClientBuilder.build()
                 .post()
-                .uri("http://AUTH-SERVICE/api/v1/auth/validateToken?token=")
+                .uri("http://AUTH-SERVICE/api/v1/auth/validateToken?token=" + token + "&method=" + methodId)
                 .retrieve().bodyToMono(CredentialsDto.class)
                 .map(credentialsDto -> {
-//                        exchange.getRequest()
-//                                .mutate()
-//                                .build().getBody().
                     System.out.println(credentialsDto);
                     exchange.getRequest()
                             .mutate()
-                            .header("x-auth-user-id", String.valueOf(credentialsDto.getUsername()));
+                            .header("x-auth-user-id", String.valueOf(credentialsDto.getUsername()))
+                            .header("x-auth-user-secret", String.valueOf(credentialsDto.getPassword()))
+                            .header("Location", String.valueOf(credentialsDto.getBankUrl()));
                     return exchange;
-                }).flatMap(chain::filter);*/
+                }).flatMap(chain::filter);
     }
 }

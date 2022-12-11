@@ -18,4 +18,6 @@ public class PaymentRequestDto {
     private String failedUrl;
 
     private String errorUrl;
+
+    private Long methodId;
 }

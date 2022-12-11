@@ -1,8 +1,7 @@
 package com.example.authservice.service;
 
 import com.example.authservice.dto.AddCredentialsRequestDto;
-import com.example.authservice.dto.PaymentDataDto;
-import com.example.authservice.exception.NotFoundException;
+import com.example.authservice.dto.CredentialsResponseDto;
 import com.example.authservice.model.*;
 import com.example.authservice.repository.CredentialsRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -64,4 +63,10 @@ public class CredentialsService {
 
     }
 
+    public CredentialsResponseDto getCredentialsAndBankUrl(String token, Long paymentMethodId) {
+        Merchant merchant = merchantService.findByApiKey(token);
+        Set<Credentials> credentials = credentialsRepository.findByMerchantId(merchant.getId());
+        Credentials credential = credentials.stream().filter(c -> c.getPaymentMethod().getId().equals(paymentMethodId)).findFirst().get();
+        return new CredentialsResponseDto(credential.getUsername(), credential.getPassword(), credential.getBank().getUrl());
+    }
 }

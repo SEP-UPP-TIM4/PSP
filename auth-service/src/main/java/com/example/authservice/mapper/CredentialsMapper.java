@@ -6,7 +6,8 @@ import com.example.authservice.model.Credentials;
 
 public class CredentialsMapper {
     public static PaymentProcessingDto CredentialsToPaymentProcessingDto(Credentials credentials, Long id){
-        return new PaymentProcessingDto(credentials.getPaymentMethod().getId(), credentials.getPaymentMethod().getName(), id);
+        return new PaymentProcessingDto(credentials.getPaymentMethod().getId(),
+                credentials.getPaymentMethod().getName(), id, credentials.getPaymentMethod().getUrl());
     }
 
     public static CredentialsDto CredentialsToCredentialsDto(Credentials credentials){

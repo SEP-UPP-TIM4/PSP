@@ -11,4 +11,5 @@ public class PaymentProcessingDto {
     private Long paymentMethodId;
     private String paymentName;
     private Long paymentRequestId;
+    private String paymentMethodUrl;
 }

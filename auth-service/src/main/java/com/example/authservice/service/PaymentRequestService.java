@@ -25,7 +25,7 @@ public class PaymentRequestService {
 
     public PaymentDataDto getPaymentRequestForId(Long paymentRequestId) {
         PaymentRequest paymentRequest = findById(paymentRequestId);
-        return new PaymentDataDto(paymentRequest.getApiKey(), paymentRequest.getAmount(), paymentRequest.getCurrency(),
+        return new PaymentDataDto(paymentRequest.getApiKey(), paymentRequest.getAmount(),
                 paymentRequest.getSuccessUrl(), paymentRequest.getFailedUrl(), paymentRequest.getErrorUrl());
     }
 }

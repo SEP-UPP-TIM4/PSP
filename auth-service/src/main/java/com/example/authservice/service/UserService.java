@@ -12,8 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,7 +21,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
-    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenUtils tokenUtils;
 
@@ -32,14 +29,13 @@ public class UserService {
         this.roleService = roleService;
         this.authenticationManager = authenticationManager;
         this.tokenUtils = tokenUtils;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public User add(String username, String password, String userRole) {
         Role role = roleService.findByName(userRole);
         if(userRepository.findByUsername(username).isPresent())
             throw new UsernameAlreadyExistsException();
-        User newUser = User.builder().role(role).username(username).password(passwordEncoder.encode(password)).activated(true).build();
+        User newUser = User.builder().role(role).username(username).password(password).activated(true).build();
         return userRepository.save(newUser);
     }
 

@@ -7,6 +7,7 @@ export interface PaymentMethod {
   paymentMethodId: number;
   paymentName: string;
   paymentRequestId: number;
+  paymentMethodUrl: string;
 }
 
 @Component({
@@ -50,7 +51,7 @@ export class ProcessPaymentPageComponent {
 
   getPaymentRequestData(id: number) {
     this.authService.getPaymentrequestData(id).subscribe((data: any) => {
-      this.apiKey = data.apiKey;
+      
       this.amount = data.amount;
       this.successUrl = data.successUrl;
       this.failedUrl = data.failedUrl;
@@ -64,8 +65,15 @@ export class ProcessPaymentPageComponent {
     this.selectedRowIndex = row.id;
   }
 
-  pay(paymentMethodId: number, paymentRequestId: number){
-    this.authService.processPayment(paymentMethodId, paymentRequestId).subscribe((data: any) => {
+  pay(paymentMethodId: number, paymentMethodUrl: string){
+    let body = {
+      amount: this.amount,
+      successUrl: this.successUrl,
+      failedUrl: this.failedUrl,
+      errorUrl: this.errorUrl,
+      methodId: paymentMethodId 
+    }
+    this.authService.processPayment(paymentMethodUrl, body, this.apiKey).subscribe((data: any) => {
       alert("Redirektuj ga...");
     }, (err) => {
       alert("An error occurred, please try again...");
