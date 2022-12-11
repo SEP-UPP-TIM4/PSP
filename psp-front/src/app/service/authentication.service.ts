@@ -62,10 +62,10 @@ export class AuthenticationService {
     return this.http.delete(`${config.baseUrl}${this.authServiceUrl}${this.credentialsUrl}/${credentialsId}`);
   }
 
-  processPayment(paymentUrl: string, body: any, apiKey: string) {
+  processPayment(paymentUrl: string, body: any, apiKey: string, paymentMethodId: number) {
     const headers= new HttpHeaders()
     .set('Authorization', apiKey);
-    return this.http.post(`${config.baseUrl}${paymentUrl}`, body, {headers});
+    return this.http.post(`${config.baseUrl}${paymentUrl}?paymentMethodId=${paymentMethodId}`, body, {headers});
   }
 
   getPaymentrequestData(paymentRequestId: number) {

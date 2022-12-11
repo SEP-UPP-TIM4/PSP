@@ -51,7 +51,7 @@ export class ProcessPaymentPageComponent {
 
   getPaymentRequestData(id: number) {
     this.authService.getPaymentrequestData(id).subscribe((data: any) => {
-      
+      this.apiKey = data.apiKey;
       this.amount = data.amount;
       this.successUrl = data.successUrl;
       this.failedUrl = data.failedUrl;
@@ -70,10 +70,9 @@ export class ProcessPaymentPageComponent {
       amount: this.amount,
       successUrl: this.successUrl,
       failedUrl: this.failedUrl,
-      errorUrl: this.errorUrl,
-      methodId: paymentMethodId 
+      errorUrl: this.errorUrl
     }
-    this.authService.processPayment(paymentMethodUrl, body, this.apiKey).subscribe((data: any) => {
+    this.authService.processPayment(paymentMethodUrl, body, this.apiKey, paymentMethodId).subscribe((data: any) => {
       alert("Redirektuj ga...");
     }, (err) => {
       alert("An error occurred, please try again...");

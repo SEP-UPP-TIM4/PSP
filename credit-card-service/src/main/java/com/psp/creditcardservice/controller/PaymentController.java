@@ -17,8 +17,10 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+
+    @PostMapping
     @ResponseStatus(value = HttpStatus.OK)
-    public RedirectDto create(@RequestBody PaymentRequestDto requestDto) {
+    public RedirectDto create(@RequestBody PaymentRequestDto requestDto, @RequestParam("paymentMethodId")Long id) {
         // TODO: merchant id and merchant password get from request header
         Payment payment = paymentService.createNewPayment(requestDto);
         // TODO: make rest call to bank to get payment url and payment id

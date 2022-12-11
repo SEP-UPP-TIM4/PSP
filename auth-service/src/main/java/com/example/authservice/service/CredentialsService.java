@@ -12,11 +12,9 @@ import java.util.Set;
 
 @Service
 public class CredentialsService {
-
-    private final PasswordEncoder passwordEncoder;
-    private final MerchantService merchantService;
     private final CredentialsRepository credentialsRepository;
     private final UserService userService;
+    private final MerchantService merchantService;
     private final BankService bankService;
     private final PaymentMethodService paymentMethodService;
     private final PaymentRequestService paymentRequestService;
@@ -31,14 +29,13 @@ public class CredentialsService {
         this.bankService = bankService;
         this.paymentMethodService = paymentMethodService;
         this.paymentRequestService = paymentRequestService;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public Credentials add(AddCredentialsRequestDto addCredentialsRequestDto, String username){
         Merchant merchant = merchantService.findByUserId(userService.findByUsername(username).getId());
         PaymentMethod paymentMethod = paymentMethodService.findById(addCredentialsRequestDto.getPaymentMethodId());
         Credentials credentials = Credentials.builder().username(addCredentialsRequestDto.getUsername())
-                .password(passwordEncoder.encode(addCredentialsRequestDto.getPassword()))
+                .password(addCredentialsRequestDto.getPassword())
                 .paymentMethod(paymentMethod).build();
         if(addCredentialsRequestDto.getBankId() != null) {
             Bank bank = bankService.findById(addCredentialsRequestDto.getBankId());

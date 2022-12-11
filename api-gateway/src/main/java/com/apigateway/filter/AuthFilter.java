@@ -3,10 +3,12 @@ package com.apigateway.filter;
 import com.apigateway.dto.CredentialsDto;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -25,15 +27,13 @@ public class AuthFilter implements GlobalFilter {
             GatewayFilterChain chain) {
 
 
-        if(!exchange.getRequest().getURI().getPath().contains("/payment/")) {
+        if(!exchange.getRequest().getURI().getPath().contains("/payment?")) {
             return chain.filter(exchange);
         }
 
         String token = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
 
-        String methodId = exchange.getAttribute("methodId");
-
-        System.out.println(methodId);
+        String methodId = exchange.getRequest().getQueryParams().get("paymentMethodId").toString();
 
         return webClientBuilder.build()
                 .post()
