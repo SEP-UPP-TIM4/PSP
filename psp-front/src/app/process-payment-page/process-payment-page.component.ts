@@ -73,7 +73,7 @@ export class ProcessPaymentPageComponent {
       errorUrl: this.errorUrl
     }
     this.authService.processPayment(paymentMethodUrl, body, this.apiKey, paymentMethodId).subscribe((data: any) => {
-      alert("Redirektuj ga...");
+      window.location.href = data.url;
     }, (err) => {
       alert("An error occurred, please try again...");
     })

@@ -18,6 +18,9 @@ public class Payment {
     private Long id;
 
     @Setter
+    private String url;
+
+    @Setter
     private String merchantId;
 
     @Setter
@@ -36,7 +39,4 @@ public class Payment {
 
     @Setter
     private LocalDateTime acquirerTimestamp;
-
-    @Setter
-    private Long paymentId;
 }
