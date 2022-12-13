@@ -6,6 +6,7 @@ import com.example.authservice.dto.MerchantPaymentMethodsDto;
 import com.example.authservice.dto.NewQRCodeDto;
 import com.example.authservice.model.PaymentMethod;
 import com.example.authservice.service.PaymentMethodService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
@@ -18,17 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping(value = "api/v1/payment-method")
 public class PaymentMethodController {
 
     private final PaymentMethodService paymentMethodService;
 
     private final ModelMapper modelMapper = new ModelMapper();
-    private final RestTemplate restTemplate;
 
-    public PaymentMethodController(PaymentMethodService paymentMethodService, RestTemplate restTemplate) {
+    public PaymentMethodController(PaymentMethodService paymentMethodService) {
         this.paymentMethodService = paymentMethodService;
-        this.restTemplate = restTemplate;
     }
 
     @PostMapping
@@ -36,12 +36,14 @@ public class PaymentMethodController {
     @ResponseStatus(value = HttpStatus.OK)
     public AddPaymentMethodResponseDto add(@RequestBody AddPaymentMethodRequestDto request) {
         PaymentMethod paymentMethod = paymentMethodService.add(request.getName(), request.getUrl(), request.isBankPayment());
+        log.info("Payment method  successfully added. Payment method: {}", request.getName());
         return modelMapper.map(paymentMethod, AddPaymentMethodResponseDto.class);
     }
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
     public List<AddPaymentMethodResponseDto> getPaymentMethods() {
+        log.info("Payment methods successfully gotten.");
         return modelMapper.map(paymentMethodService.findAll(), new TypeToken<List<AddPaymentMethodResponseDto>>() {}.getType());
     }
 
@@ -50,6 +52,7 @@ public class PaymentMethodController {
     @ResponseStatus(value = HttpStatus.OK)
     public void deletePaymentMethod(@PathVariable Long id){
         paymentMethodService.delete(id);
+        log.info("Payment method successfully deleted. Payment method id: {}", id);
     }
 
 //    @GetMapping

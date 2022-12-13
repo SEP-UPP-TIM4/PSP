@@ -1,6 +1,7 @@
 package com.apigateway.filter;
 
 import com.apigateway.dto.CredentialsDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @Component
 public class AuthFilter implements GlobalFilter {
 
@@ -43,6 +45,9 @@ public class AuthFilter implements GlobalFilter {
             System.out.println("*****Body request " + bodyCaptureExchange.getRequest().getFullBody());
         });
         /**/
+        if(token.equals("")){
+            log.info("Authorization header missing.");
+        }
 
         return webClientBuilder.build()
                 .post()
