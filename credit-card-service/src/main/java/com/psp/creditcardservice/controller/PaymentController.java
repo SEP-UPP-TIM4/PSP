@@ -20,7 +20,6 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping
     @ResponseStatus(value = HttpStatus.OK)
     public RedirectDto create(@RequestBody PaymentRequestDto requestDto, @RequestParam("paymentMethodId")Long id,
@@ -29,7 +28,7 @@ public class PaymentController {
         String merchantPassword = request.getHeader("x-auth-user-secret");
         String bankUrl = request.getHeader("Location");
         Payment payment = paymentService.createNewPayment(requestDto, new CredentialsDto(merchantId, merchantPassword, bankUrl));
-        return new RedirectDto(payment.getUrl() + payment.getId());
+        return new RedirectDto(payment.getUrl() + "/" + payment.getId());
     }
 
 }

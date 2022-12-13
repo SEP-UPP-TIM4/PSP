@@ -34,6 +34,9 @@ public class Payment {
     @OneToOne
     private Transaction transaction;
 
+    /*@Setter
+    private Long paymentId;*/
+
     @Setter
     private Long acquirerOrderId;
 
