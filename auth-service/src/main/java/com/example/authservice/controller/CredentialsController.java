@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class CredentialsController {
 
     private final CredentialsService credentialsService;
-    private final String AUTH_HEADER = "Authorization";
     private final ModelMapper modelMapper = new ModelMapper();
 
     public CredentialsController(CredentialsService credentialsService) {

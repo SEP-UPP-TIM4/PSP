@@ -1,6 +1,5 @@
 package com.psp.creditcardservice.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

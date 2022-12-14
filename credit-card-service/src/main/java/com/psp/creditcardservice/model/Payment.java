@@ -24,9 +24,6 @@ public class Payment {
     private String merchantId;
 
     @Setter
-    private String merchantPassword;
-
-    @Setter
     @OneToOne
     private Bank bank;
 
