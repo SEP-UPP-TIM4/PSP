@@ -23,6 +23,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(MissingCredentialsException.class)
+    public ResponseEntity<Object> handleMissingCredentialsException(MissingCredentialsException exception) {
+        ExceptionResponse response = getExceptionResponse(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity<InvalidQrCodeResponseDto> identificationCodeInvalid(final MethodArgumentNotValidException ex) {
