@@ -1,9 +1,7 @@
 package com.qrcodeservice.service;
 
-import com.qrcodeservice.dto.CredentialsDto;
-import com.qrcodeservice.dto.PaymentRequestDto;
-import com.qrcodeservice.dto.PaymentResponseDto;
-import com.qrcodeservice.dto.ValidateDto;
+import com.qrcodeservice.dto.*;
+import com.qrcodeservice.exception.NotFoundException;
 import com.qrcodeservice.model.Currency;
 import com.qrcodeservice.model.Payment;
 import com.qrcodeservice.model.Transaction;
@@ -52,6 +50,20 @@ public class PaymentService {
             log.error("Error in communication");
         }
         return new PaymentResponseDto(data.getPaymentUrl(), data.getPaymentId());
+    }
+
+    public void finish(PaymentInfoDto paymentInfoDto) {
+        Payment payment = getById(paymentInfoDto.getPaymentId());
+        payment.setAcquirerOrderId(paymentInfoDto.getAcquirerOrderId());
+        payment.setAcquirerTimestamp(paymentInfoDto.getAcquirerTimestamp());
+        Transaction transaction = transactionService.updateStatus(paymentInfoDto.getMerchantOrderId(), paymentInfoDto.getTransactionStatus());
+        log.info("Status of transaction with is {} successfully changed to {}", transaction.getId(), transaction.getStatus());
+        payment.setTransaction(transaction);
+        paymentRepository.save(payment);
+    }
+
+    private Payment getById(Long paymentId) {
+        return paymentRepository.findById(paymentId).orElseThrow(() -> new NotFoundException(Payment.class.getSimpleName()));
     }
 
 }

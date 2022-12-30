@@ -1,6 +1,7 @@
 package com.qrcodeservice.controller;
 
 import com.qrcodeservice.dto.CredentialsDto;
+import com.qrcodeservice.dto.PaymentInfoDto;
 import com.qrcodeservice.dto.PaymentRequestDto;
 import com.qrcodeservice.dto.RedirectDto;
 import com.qrcodeservice.exception.MissingCredentialsException;
@@ -32,6 +33,12 @@ public class PaymentController {
         return new RedirectDto(payment.getUrl() + "/" + payment.getId());
     }
 
+    @PostMapping(value = "finish")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void finish(@RequestBody PaymentInfoDto paymentInfoDto) {
+        paymentService.finish(paymentInfoDto);
+        log.info("Payment with id {} successfully finished", paymentInfoDto.getPaymentId());
+    }
 
     private CredentialsDto getCredentialsFromHeader(HttpServletRequest request) {
         String merchantId = request.getHeader("x-auth-user-id");
