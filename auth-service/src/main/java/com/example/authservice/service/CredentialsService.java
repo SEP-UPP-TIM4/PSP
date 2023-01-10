@@ -69,6 +69,7 @@ public class CredentialsService {
         Set<Credentials> credentials = credentialsRepository.findByMerchantId(merchant.getId());
         Credentials credential = credentials.stream().filter(c -> c.getPaymentMethod().getId().equals(paymentMethodId)).findFirst().get();
         log.info("Token successfully validated. Token: {}", token);
+        //Bank?
         return new CredentialsResponseDto(credential.getUsername(), credential.getPassword(), credential.getBank().getUrl());
     }
 }
