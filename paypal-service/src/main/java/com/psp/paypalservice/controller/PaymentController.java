@@ -1,7 +1,12 @@
 package com.psp.paypalservice.controller;
 
+import com.paypal.api.payments.Links;
+import com.paypal.api.payments.Payment;
+import com.paypal.base.rest.PayPalRESTException;
+import com.psp.paypalservice.dto.CredentialsDto;
 import com.psp.paypalservice.dto.PaymentRequestDto;
 import com.psp.paypalservice.dto.RedirectDto;
+import com.psp.paypalservice.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +18,37 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "api/v1/payment")
 public class PaymentController {
 
+    private final PaymentService paymentService;
+
+    public PaymentController(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+
     @PostMapping
     @ResponseStatus(value = HttpStatus.OK)
     public RedirectDto create(@RequestBody PaymentRequestDto requestDto, @RequestParam("paymentMethodId")Long id,
-                              HttpServletRequest request) {
-        return new RedirectDto("Check one,two,three");
+                              HttpServletRequest request) throws PayPalRESTException {
+        CredentialsDto credentials = getCredentialsFromHeader(request);
+        Payment payment = paymentService.createPayment(requestDto, credentials);
+        return new RedirectDto(getPaymentLink(payment));
+    }
+
+    private CredentialsDto getCredentialsFromHeader(HttpServletRequest request) {
+        String merchantId = request.getHeader("x-auth-user-id");
+        String merchantPassword = request.getHeader("x-auth-user-secret");
+        if(merchantId.equals("") || merchantPassword.equals("")) {
+//            log.warn("Missing credentials in request header! from: {}", request.getRemoteAddr());
+//            throw new MissingCredentialsException();
+        }
+        return new CredentialsDto(merchantId, merchantPassword);
+    }
+
+    private String getPaymentLink(Payment payment){
+        for(Links link: payment.getLinks()){
+            if(link.getRel().equals("approval_url")){
+                return link.getHref();
+            }
+        }
+        return null;
     }
 }
