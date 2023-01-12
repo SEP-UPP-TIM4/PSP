@@ -6,12 +6,15 @@ import com.paypal.base.rest.PayPalRESTException;
 import com.psp.paypalservice.dto.CredentialsDto;
 import com.psp.paypalservice.dto.PaymentRequestDto;
 import com.psp.paypalservice.dto.RedirectDto;
+import com.psp.paypalservice.exception.MissingCredentialsException;
 import com.psp.paypalservice.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 
 @Slf4j
 @RestController
@@ -30,6 +33,7 @@ public class PaymentController {
                               HttpServletRequest request) throws PayPalRESTException {
         CredentialsDto credentials = getCredentialsFromHeader(request);
         Payment payment = paymentService.createPayment(requestDto, credentials);
+        log.info("Payment request successfully created. Payment id: {}", payment.getId());
         return new RedirectDto(getPaymentLink(payment));
     }
 
@@ -37,8 +41,8 @@ public class PaymentController {
         String merchantId = request.getHeader("x-auth-user-id");
         String merchantPassword = request.getHeader("x-auth-user-secret");
         if(merchantId.equals("") || merchantPassword.equals("")) {
-//            log.warn("Missing credentials in request header! from: {}", request.getRemoteAddr());
-//            throw new MissingCredentialsException();
+            log.warn("Missing credentials in request header! from: {}", request.getRemoteAddr());
+            throw new MissingCredentialsException();
         }
         return new CredentialsDto(merchantId, merchantPassword);
     }
@@ -50,5 +54,12 @@ public class PaymentController {
             }
         }
         return null;
+    }
+
+    @GetMapping(value = "/execute")
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseEntity<HttpStatus> execute(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) throws PayPalRESTException {
+        String retUrl = paymentService.executePayment(paymentId, payerId);
+        return ResponseEntity.status(HttpStatus.SEE_OTHER).location(URI.create(retUrl)).build();
     }
 }
