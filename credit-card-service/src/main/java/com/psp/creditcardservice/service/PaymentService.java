@@ -11,6 +11,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class PaymentService {
@@ -18,20 +20,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
     private final TransactionService transactionService;
-    private PaymentResponseDto getPaymentIdAndPaymentUrl(CredentialsDto credentialsDto, PaymentRequestDto requestDto, Transaction transaction) {
-        HttpEntity<ValidateDto> body = new HttpEntity<>(new ValidateDto(
-                credentialsDto.getMerchantId(), credentialsDto.getMerchantPassword(),
-                requestDto.getAmount(), "RSD", transaction.getId(), transaction.getTimestamp(),
-                requestDto.getSuccessUrl(), requestDto.getFailedUrl(), requestDto.getErrorUrl()
-        ));
-        PaymentResponseDto data = new PaymentResponseDto();
-        try {
-            data = restTemplate.postForObject("http://localhost:9003/api/v1/payment/validate", body, PaymentResponseDto.class);
-        } catch (Exception ex) {
-            log.error("Error in communication");
-        }
-        return new PaymentResponseDto(data.getPaymentUrl(), data.getPaymentId());
-    }
+
     private final BankService bankService;
 
     private final RestTemplate restTemplate;
@@ -55,7 +44,20 @@ public class PaymentService {
                 .bank(bankService.getByUrl(credentialsDto.getBankUrl())).build());
     }
 
-
+    private PaymentResponseDto getPaymentIdAndPaymentUrl(CredentialsDto credentialsDto, PaymentRequestDto requestDto, Transaction transaction) {
+        HttpEntity<ValidateDto> body = new HttpEntity<>(new ValidateDto(
+                credentialsDto.getMerchantId(), credentialsDto.getMerchantPassword(),
+                requestDto.getAmount(), "RSD", transaction.getId(), transaction.getTimestamp(),
+                requestDto.getSuccessUrl(), requestDto.getFailedUrl(), requestDto.getErrorUrl()
+        ));
+        PaymentResponseDto data = new PaymentResponseDto();
+        try {
+            data = restTemplate.postForObject("http://localhost:9003/api/v1/payment/validate", body, PaymentResponseDto.class);
+        } catch (Exception ex) {
+            log.error("Error in communication");
+        }
+        return new PaymentResponseDto(data.getPaymentUrl(), data.getPaymentId());
+    }
 
     public void finish(PaymentInfoDto paymentInfoDto) {
         Payment payment = getById(paymentInfoDto.getPaymentId());
@@ -67,7 +69,7 @@ public class PaymentService {
         paymentRepository.save(payment);
     }
 
-    private Payment getById(Long paymentId) {
+    private Payment getById(UUID paymentId) {
         return paymentRepository.findById(paymentId).orElseThrow(() -> new NotFoundException(Payment.class.getSimpleName()));
     }
 }

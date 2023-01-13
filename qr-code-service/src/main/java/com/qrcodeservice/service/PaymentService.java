@@ -11,6 +11,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class PaymentService {
@@ -62,7 +64,7 @@ public class PaymentService {
         paymentRepository.save(payment);
     }
 
-    private Payment getById(Long paymentId) {
+    private Payment getById(UUID paymentId) {
         return paymentRepository.findById(paymentId).orElseThrow(() -> new NotFoundException(Payment.class.getSimpleName()));
     }
 

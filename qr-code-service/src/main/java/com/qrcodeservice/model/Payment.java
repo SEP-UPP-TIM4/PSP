@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -14,8 +15,7 @@ import java.time.LocalDateTime;
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Setter
     private String url;
@@ -31,8 +31,6 @@ public class Payment {
     @OneToOne
     private Transaction transaction;
 
-    /*@Setter
-    private Long paymentId;*/
 
     @Setter
     private Long acquirerOrderId;

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -11,5 +13,5 @@ public class PaymentResponseDto {
 
     private String paymentUrl;
 
-    private Long paymentId;
+    private UUID paymentId;
 }

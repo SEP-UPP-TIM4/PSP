@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class PaymentInfoDto {
 
     private LocalDateTime acquirerTimestamp;
 
-    private Long paymentId;
+    private UUID paymentId;
 
     private String transactionStatus;
 
