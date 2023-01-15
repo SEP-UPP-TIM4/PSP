@@ -30,7 +30,7 @@ public class AuthFilter implements GlobalFilter {
             ServerWebExchange exchange,
             GatewayFilterChain chain) {
 
-        if (!exchange.getRequest().getURI().toString().contains("/payment?")) {
+        if (!exchange.getRequest().getURI().toString().contains("/payment?") && !exchange.getRequest().getURI().toString().contains("/subscription?")) {
             return chain.filter(exchange);
         }
 
