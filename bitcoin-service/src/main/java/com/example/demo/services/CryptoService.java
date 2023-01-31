@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.DTOs.CryptoRequestDTO;
 import com.example.demo.DTOs.CryptoResponseDTO;
+import com.example.demo.DTOs.PaymentRequestDTO;
 import com.example.demo.exceptions.OrderNotValidException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,23 @@ public class CryptoService {
     @Autowired
     RestTemplate client;
 
-    public CryptoResponseDTO pay(CryptoRequestDTO request, String apiToken) {
+     private final String USD_CURRENCY = "USD";
+
+    public CryptoResponseDTO pay(PaymentRequestDTO paymentRequest, String apiToken) {
 
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer "+apiToken);
+
+        var request = CryptoRequestDTO.builder()
+                .priceAmount(paymentRequest.getAmount())
+                .priceCurrency(USD_CURRENCY)
+                .receiveCurrency(USD_CURRENCY)
+                .successUrl(paymentRequest.getSuccessUrl())
+                .cancelUrl(paymentRequest.getFailedUrl())
+                .build();
+
+        System.out.println(request.toString());
 
         var entity = new HttpEntity<>(request, headers);
 

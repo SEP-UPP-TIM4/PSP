@@ -2,14 +2,16 @@ package com.example.demo.controllers;
 
 import com.example.demo.DTOs.CryptoRequestDTO;
 import com.example.demo.DTOs.CryptoResponseDTO;
+import com.example.demo.DTOs.PaymentRequestDTO;
 import com.example.demo.exceptions.MissingCredentialsException;
 import com.example.demo.services.CryptoService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -23,9 +25,9 @@ public class CryptoController {
 
 
     @PostMapping
-    public CryptoResponseDTO pay(@RequestBody CryptoRequestDTO cryptoRequest, @RequestParam("paymentMethodId")Long id, HttpServletRequest request) {
+    public CryptoResponseDTO pay(@RequestBody PaymentRequestDTO paymentRequest, @RequestParam("paymentMethodId")Long id, HttpServletRequest request) {
         String apiToken = getCredentialsFromHeader(request);
-        return cryptoService.pay(cryptoRequest, apiToken);
+        return cryptoService.pay(paymentRequest, apiToken);
     }
 
     private String getCredentialsFromHeader(HttpServletRequest request) {
