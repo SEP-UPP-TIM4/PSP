@@ -5,6 +5,7 @@ import com.example.demo.DTOs.CryptoResponseDTO;
 import com.example.demo.DTOs.PaymentRequestDTO;
 import com.example.demo.exceptions.OrderNotValidException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CryptoService {
 
     @Autowired
@@ -25,6 +27,7 @@ public class CryptoService {
      private final String USD_CURRENCY = "USD";
 
     public CryptoResponseDTO pay(PaymentRequestDTO paymentRequest, String apiToken) {
+
 
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -47,10 +50,15 @@ public class CryptoService {
 
         var paymentUrl = Objects.requireNonNull(response).get("payment_url").toString();
 
-        if (paymentUrl == null) {
+        var id = Objects.requireNonNull(response).get("id").toString();
+
+
+
+        if (paymentUrl == null || id == null) {
             throw new OrderNotValidException();
         }
 
+        log.info("Payment with id " + id + " successfully created, payment URL is: " + paymentUrl);
         return new CryptoResponseDTO(paymentUrl);
     }
 }
