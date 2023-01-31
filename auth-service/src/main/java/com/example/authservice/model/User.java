@@ -1,10 +1,12 @@
 package com.example.authservice.model;
 
 import lombok.*;
+import org.apache.commons.codec.binary.Base32;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +33,9 @@ public class User implements UserDetails {
     private Role role;
 
     private boolean activated;
+
+    @Column(name = "secret", unique = false, nullable = false)
+    private String secret;
 
     public boolean isActivated() {
         return activated;
@@ -75,4 +80,14 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return isActivated();
     }
+
+    @PrePersist
+    private void generateSecretKey() {
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[20];
+        random.nextBytes(bytes);
+        Base32 base32 = new Base32();
+        secret = base32.encodeToString(bytes);
+    }
+
 }

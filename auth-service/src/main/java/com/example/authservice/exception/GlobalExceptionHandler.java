@@ -47,6 +47,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(CodeNotMatchingException.class)
+    public ResponseEntity<Object> handleCodeNotMatching(CodeNotMatchingException exception) {
+        ExceptionResponse response = getExceptionResponse(exception.getMessage());
+        log.warn(response.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception) {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());

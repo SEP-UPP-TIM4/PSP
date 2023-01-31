@@ -18,6 +18,8 @@ export class GettingStartedPageComponent {
     this.authService.register(registrationDTO).subscribe((data: any) => {
         this.router.navigateByUrl('/sign-in')
         alert(data.apiKey);
+        alert(data.secret);
+        
     }, (err) => {
       alert("An error occurred, please try again...");
     })

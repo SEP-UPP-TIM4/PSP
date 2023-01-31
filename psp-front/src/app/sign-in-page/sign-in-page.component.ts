@@ -25,7 +25,7 @@ export class SignInPageComponent {
   }
 
   loginUser(credentials: NgForm) {
-    let loginDTO: LoginDTO = { username: credentials.value.username, password: credentials.value.password };
+    let loginDTO: LoginDTO = { username: credentials.value.username, password: credentials.value.password, code: credentials.value.code };
     this.authService.login(loginDTO).subscribe((data: any) => {
       this.storageService.storeTokenData(data.jwtToken);
       if (this.storageService.getRoleFromToken() == 'ROLE_ADMIN') {

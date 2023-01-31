@@ -28,6 +28,7 @@ public class MerchantController {
         Merchant newMerchant = merchantService.register(request.getName(), request.getUsername(), request.getPassword());
         RegisterResponseDto responseDto = modelMapper.map(newMerchant, RegisterResponseDto.class);
         responseDto.setUsername(newMerchant.getUser().getUsername());
+        responseDto.setSecret(newMerchant.getUser().getSecret());
         log.info("Merchant successfully added. Merchant username: {}", request.getUsername());
         return responseDto;
     }

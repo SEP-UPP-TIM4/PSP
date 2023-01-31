@@ -20,4 +20,5 @@ public class RegisterResponseDto {
     private String username;
 
     private String apiKey;
+    private String secret;
 }

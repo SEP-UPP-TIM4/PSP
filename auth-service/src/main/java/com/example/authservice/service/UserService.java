@@ -2,15 +2,15 @@ package com.example.authservice.service;
 
 import com.example.authservice.dto.JwtTokenDto;
 import com.example.authservice.dto.LoginUserDto;
-import com.example.authservice.exception.NotFoundException;
-import com.example.authservice.exception.TokenExpiredException;
-import com.example.authservice.exception.TokenNotValid;
-import com.example.authservice.exception.UsernameAlreadyExistsException;
+import com.example.authservice.exception.*;
+import de.taimos.totp.TOTP;
 import com.example.authservice.model.Role;
 import com.example.authservice.model.User;
 import com.example.authservice.model.VerificationToken;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.security.util.TokenUtils;
+import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -63,9 +63,18 @@ public class UserService {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginUserDto.getUsername(), loginUserDto.getPassword()));
-
+        if(loginUserDto.getCode() == null || !loginUserDto.getCode().equals(getTOTPCode(user.get().getSecret()))) {
+            throw new CodeNotMatchingException();
+        }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new JwtTokenDto(getToken(user.get()));
+    }
+
+    private String getTOTPCode(String secretKey) {
+        Base32 base32 = new Base32();
+        byte[] bytes = base32.decode(secretKey);
+        String hexKey = Hex.encodeHexString(bytes);
+        return TOTP.getOTP(hexKey);
     }
 
     private String getToken(User user) {
