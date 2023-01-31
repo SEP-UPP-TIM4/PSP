@@ -9,7 +9,11 @@ import com.example.authservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response;
 
 @RestController
 @Slf4j
@@ -35,5 +39,12 @@ public class UserController {
     public JwtTokenDto login(@RequestBody LoginUserDto loginUserDto) {
         log.info("Login successful. Username: {}", loginUserDto.getUsername());
         return userService.login(loginUserDto);
+    }
+
+    @GetMapping(value = "/confirm/{token}")
+    public ResponseEntity<HttpStatus> confirmToken(@PathVariable String token) {
+
+        userService.verifyUserAccount(token);
+        return ResponseEntity.ok().build();
     }
 }

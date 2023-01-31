@@ -19,6 +19,7 @@ export class AuthenticationService {
   private credentialsUrl = "/credentials"
   private paymentRequestUrl = "/payment-request"
   private processPaymentUrl = "/process-payment"
+  private acctivateAccountUrl = "/users/confirm"
   
   constructor(private http: HttpClient) { }
 
@@ -36,6 +37,10 @@ export class AuthenticationService {
 
   getPaymentMethodsForClient(id: number) {
     return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.credentialsUrl}${this.paymentRequestUrl}/${id}`)
+  }
+
+  activateAccount(token: string) {
+    return this.http.get(`${config.baseUrl}${this.authServiceUrl}${this.acctivateAccountUrl}/${token}`)
   }
 
   getMerchantPaymentMethods() {

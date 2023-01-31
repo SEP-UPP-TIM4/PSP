@@ -33,6 +33,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<Object> handleTokenExpired(TokenExpiredException exception) {
+        ExceptionResponse response = getExceptionResponse(exception.getMessage());
+        log.warn(response.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TokenNotValid.class)
+    public ResponseEntity<Object> handleTokenNotValid(TokenNotValid exception) {
+        ExceptionResponse response = getExceptionResponse(exception.getMessage());
+        log.warn(response.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception) {
         ExceptionResponse response = getExceptionResponse(exception.getMessage());

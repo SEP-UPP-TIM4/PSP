@@ -22,6 +22,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MerchantPageComponent } from './merchant-page/merchant-page.component';
 import {MatSelectModule} from '@angular/material/select';
 import { ProcessPaymentPageComponent } from './process-payment-page/process-payment-page.component';
+import { AccountActivationComponent } from './account-activation/account-activation.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ProcessPaymentPageComponent } from './process-payment-page/process-paym
     GettingStartedPageComponent,
     AdminPageComponent,
     MerchantPageComponent,
-    ProcessPaymentPageComponent
+    ProcessPaymentPageComponent,
+    AccountActivationComponent
   ],
   imports: [
     BrowserModule,

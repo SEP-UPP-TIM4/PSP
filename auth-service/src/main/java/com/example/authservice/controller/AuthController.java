@@ -4,7 +4,10 @@ import com.example.authservice.dto.CredentialsResponseDto;
 import com.example.authservice.service.CredentialsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -22,4 +25,5 @@ public class AuthController {
     public CredentialsResponseDto validate(@RequestParam("token") String token, @RequestParam("method") Long paymentMethodId) {
         return credentialsService.getCredentialsAndBankUrl(token, paymentMethodId);
     }
+
 }

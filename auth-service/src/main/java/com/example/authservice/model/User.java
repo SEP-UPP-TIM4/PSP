@@ -32,6 +32,13 @@ public class User implements UserDetails {
 
     private boolean activated;
 
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Role> roles = new HashSet<>();
@@ -66,6 +73,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isActivated();
     }
 }

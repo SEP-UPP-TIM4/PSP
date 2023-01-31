@@ -3,9 +3,12 @@ package com.example.authservice.service;
 import com.example.authservice.dto.JwtTokenDto;
 import com.example.authservice.dto.LoginUserDto;
 import com.example.authservice.exception.NotFoundException;
+import com.example.authservice.exception.TokenExpiredException;
+import com.example.authservice.exception.TokenNotValid;
 import com.example.authservice.exception.UsernameAlreadyExistsException;
 import com.example.authservice.model.Role;
 import com.example.authservice.model.User;
+import com.example.authservice.model.VerificationToken;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.security.util.TokenUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -23,15 +29,20 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
     private final TokenUtils tokenUtils;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationTokenService verificationTokenService;
+    private static final int REGISTRATION_TOKEN_EXPIRES = 60;
 
-    public UserService(UserRepository userRepository, RoleService roleService, AuthenticationManager authenticationManager, TokenUtils tokenUtils) {
+    public UserService(UserRepository userRepository, RoleService roleService, EmailService emailService, AuthenticationManager authenticationManager, TokenUtils tokenUtils, VerificationTokenService verificationTokenService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.emailService = emailService;
         this.authenticationManager = authenticationManager;
         this.tokenUtils = tokenUtils;
+        this.verificationTokenService = verificationTokenService;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -39,8 +50,12 @@ public class UserService {
         Role role = roleService.findByName(userRole);
         if(userRepository.findByUsername(username).isPresent())
             throw new UsernameAlreadyExistsException();
-        User newUser = User.builder().role(role).username(username).password(passwordEncoder.encode(password)).activated(true).build();
-        return userRepository.save(newUser);
+        User newUser = User.builder().role(role).username(username).password(passwordEncoder.encode(password)).activated(false).build();
+        userRepository.save(newUser);
+        VerificationToken verificationToken = new VerificationToken(newUser);
+        verificationTokenService.saveVerificationToken(verificationToken);
+        emailService.sendEmail(newUser.getUsername(), "Account verification", "http://localhost:4200/confirm/" + verificationToken.getToken() + " Click on this link to activate your account");
+        return newUser;
     }
 
     public JwtTokenDto login(LoginUserDto loginUserDto) {
@@ -61,6 +76,30 @@ public class UserService {
         Optional<User> user = userRepository.findByUsername(username);
         if(user.isEmpty()) throw new NotFoundException(User.class.getSimpleName());
         return user.get();
+    }
+
+    public String verifyUserAccount(String token) throws TokenExpiredException {
+
+        VerificationToken verificationToken = verificationTokenService.findVerificationTokenByToken(token);
+        if (verificationToken == null) {
+            throw new TokenNotValid();
+        }
+        User user = findByUsername(verificationToken.getUser().getUsername());
+
+        verificationTokenService.delete(verificationToken);
+
+        if (getDifferenceInMinutes(verificationToken) < REGISTRATION_TOKEN_EXPIRES) {
+            user.setActivated(true);
+            userRepository.save(user);
+            return user.getUsername();
+        } else {
+            throw new TokenExpiredException();
+        }
+    }
+
+    private long getDifferenceInMinutes(VerificationToken verificationToken) {
+        LocalDateTime tokenCreated = LocalDateTime.ofInstant(verificationToken.getCreatedDateTime().toInstant(), ZoneId.systemDefault());
+        return ChronoUnit.MINUTES.between(tokenCreated, LocalDateTime.now());
     }
 
 }
