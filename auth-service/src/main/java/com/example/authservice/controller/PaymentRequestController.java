@@ -30,7 +30,7 @@ public class PaymentRequestController {
         PaymentRequest paymentRequest = paymentRequestService.save(modelMapper.map(request, PaymentRequest.class));
         modelMapper.map(paymentRequest, PaymentRequestDto.class);
         log.info("Payment request successfully added. Api key: {}", request.getApiKey());
-        return "http://localhost:4200/process-payment/" + paymentRequest.getId();
+        return "https://localhost:4200/process-payment/" + paymentRequest.getId();
     }
 
     @GetMapping(value = "/{paymentRequestId}")

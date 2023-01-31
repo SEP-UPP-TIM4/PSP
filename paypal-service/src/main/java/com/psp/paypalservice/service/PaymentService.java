@@ -44,7 +44,7 @@ public class PaymentService {
 
         RedirectUrls redirectUrls = new RedirectUrls();
         redirectUrls.setCancelUrl(paymentRequestDto.getFailedUrl());
-        redirectUrls.setReturnUrl("http://localhost:8081/PAYPAL-SERVICE/api/v1/payment/execute");
+        redirectUrls.setReturnUrl("https://localhost:8081/PAYPAL-SERVICE/api/v1/payment/execute");
         payment.setRedirectUrls(redirectUrls);
 
         APIContext apiContext = new APIContext(credentials.getMerchantId(), credentials.getMerchantPassword(), "sandbox");
