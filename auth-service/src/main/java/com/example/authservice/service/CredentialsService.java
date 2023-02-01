@@ -52,8 +52,6 @@ public class CredentialsService {
     public Set<Credentials> findAll(String username){
         Set<Credentials> credentials = credentialsRepository.findByMerchantId(merchantService.findByUserId(userService.findByUsername(username).getId()).getId());
         return credentials.stream().map(x->new Credentials(x, tripleDes.encrypt(x.getPassword()))).collect(Collectors.toSet());
-//        return credentialsRepository.findByMerchantId(
-//                merchantService.findByUserId(userService.findByUsername(username).getId()).getId());
     }
 
     public void delete(Long id){
@@ -64,7 +62,6 @@ public class CredentialsService {
     public Set<Credentials> findByPaymentRequest(Long id){
         PaymentRequest paymentRequest = paymentRequestService.findById(id);
         log.info("Credentials successfully gotten. Payment request id: {}", id);
-        //return credentialsRepository.findByMerchantId(merchantService.findByApiKey(paymentRequest.getApiKey()).getId());
         Set<Credentials> credentials = credentialsRepository.findByMerchantId(merchantService.findByApiKey(paymentRequest.getApiKey()).getId());
         return credentials.stream().map(x->new Credentials(x, tripleDes.encrypt(x.getPassword()))).collect(Collectors.toSet());
     }
