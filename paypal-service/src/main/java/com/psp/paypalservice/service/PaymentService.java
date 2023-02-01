@@ -10,6 +10,7 @@ import com.paypal.base.rest.PayPalRESTException;
 import com.psp.paypalservice.dto.CredentialsDto;
 import com.psp.paypalservice.dto.PaymentRequestDto;
 import com.psp.paypalservice.model.PaymentRequest;
+import com.psp.paypalservice.model.TripleDes;
 import com.psp.paypalservice.repository.PaymentRequestRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,12 @@ public class PaymentService {
     private final PaymentRequestRepository paymentRequestRepository;
 
     private final TransactionService transactionService;
-    public PaymentService(PaymentRequestRepository paymentRequestRepository, TransactionService transactionService) {
+
+    private final TripleDes tripleDes;
+    public PaymentService(PaymentRequestRepository paymentRequestRepository, TransactionService transactionService, TripleDes tripleDes) {
         this.paymentRequestRepository = paymentRequestRepository;
         this.transactionService = transactionService;
+        this.tripleDes = tripleDes;
     }
 
     public Payment createPayment(PaymentRequestDto paymentRequestDto, CredentialsDto credentials) throws PayPalRESTException {
@@ -52,7 +56,7 @@ public class PaymentService {
 
         PaymentRequest paymentRequest = PaymentRequest.builder().paymentId(createdPayment.getId())
                 .merchantId(credentials.getMerchantId())
-                .merchantSecret(credentials.getMerchantPassword())
+                .merchantSecret(tripleDes.encrypt(credentials.getMerchantPassword()))
                 .amount(Double.parseDouble(createdPayment.getTransactions().get(0).getAmount().getTotal()))
                 .currency("USD")
                 .successUrl(paymentRequestDto.getSuccessUrl())
@@ -87,7 +91,7 @@ public class PaymentService {
         PaymentExecution paymentExecute = new PaymentExecution();
         paymentExecute.setPayerId(payerId);
         PaymentRequest paymentRequest = paymentRequestRepository.findByPaymentId(paymentId);
-        APIContext apiContext = new APIContext(paymentRequest.getMerchantId(), paymentRequest.getMerchantSecret(), "sandbox");
+        APIContext apiContext = new APIContext(paymentRequest.getMerchantId(), tripleDes.decrypt(paymentRequest.getMerchantSecret()), "sandbox");
         Payment executedPayment = payment.execute(apiContext, paymentExecute);
         transactionService.save(executedPayment);
         if(executedPayment.getState().equals("approved")) {

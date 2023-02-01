@@ -31,4 +31,12 @@ public class Credentials {
     @Setter
     private Bank bank;
 
+    public Credentials(Credentials credentials, String encryptedPassword){
+        this.id = credentials.getId();
+        this.username = credentials.getUsername();
+        this.password = encryptedPassword;
+        this.paymentMethod = credentials.getPaymentMethod();
+        this.bank = credentials.getBank();
+    }
+
 }
