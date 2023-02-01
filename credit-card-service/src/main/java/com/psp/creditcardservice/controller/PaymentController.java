@@ -36,10 +36,10 @@ public class PaymentController {
     }
 
     @PostMapping(value = "finish")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void finish(@RequestBody PaymentInfoDto paymentInfoDto) {
+    public HttpStatus finish(@RequestBody PaymentInfoDto paymentInfoDto) {
         paymentService.finish(paymentInfoDto);
         log.info("Payment with id {} successfully finished", paymentInfoDto.getPaymentId());
+        return HttpStatus.OK;
     }
 
     private CredentialsDto getCredentialsFromHeader(HttpServletRequest request) {

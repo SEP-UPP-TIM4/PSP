@@ -56,7 +56,6 @@ export class ProcessPaymentPageComponent {
       this.successUrl = data.successUrl;
       this.failedUrl = data.failedUrl;
       this.errorUrl = data.errorUrl;
-      alert(this.apiKey + "|" + this.amount + "|" + this.successUrl + "|" + this.failedUrl + "|" + this.errorUrl);
     })
   }
 
