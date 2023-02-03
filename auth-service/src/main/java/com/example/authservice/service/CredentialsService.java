@@ -4,6 +4,7 @@ import com.example.authservice.dto.AddCredentialsRequestDto;
 import com.example.authservice.dto.CredentialsResponseDto;
 import com.example.authservice.model.*;
 import com.example.authservice.repository.CredentialsRepository;
+import com.example.authservice.util.TripleDes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

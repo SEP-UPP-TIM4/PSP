@@ -1,9 +1,7 @@
 package com.example.authservice.controller;
 
-import com.example.authservice.dto.PaymentRequestDto;
 import com.example.authservice.dto.SubscriptionMethodInfoDTO;
 import com.example.authservice.dto.SubscriptionRequestDTO;
-import com.example.authservice.model.PaymentRequest;
 import com.example.authservice.model.SubscriptionRequest;
 import com.example.authservice.service.SubscriptionRequestService;
 import lombok.extern.slf4j.Slf4j;

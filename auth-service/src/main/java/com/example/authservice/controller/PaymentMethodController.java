@@ -2,8 +2,6 @@ package com.example.authservice.controller;
 
 import com.example.authservice.dto.AddPaymentMethodRequestDto;
 import com.example.authservice.dto.AddPaymentMethodResponseDto;
-import com.example.authservice.dto.MerchantPaymentMethodsDto;
-import com.example.authservice.dto.NewQRCodeDto;
 import com.example.authservice.model.PaymentMethod;
 import com.example.authservice.service.PaymentMethodService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +10,6 @@ import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import javax.ws.rs.PathParam;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -54,14 +48,4 @@ public class PaymentMethodController {
         paymentMethodService.delete(id);
         log.info("Payment method successfully deleted. Payment method id: {}", id);
     }
-
-//    @GetMapping
-//    @ResponseStatus(value = HttpStatus.OK)
-//    public void check() {
-//        String fraudCheckResponse = restTemplate.postForObject(
-//                "http://QR-CODE-SERVICE/api/qr/v1/generate",
-//                new NewQRCodeDto("", 0, 0), String.class
-//        );
-//        System.out.println(fraudCheckResponse);
-//    }
 }

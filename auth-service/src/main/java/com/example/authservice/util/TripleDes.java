@@ -1,4 +1,4 @@
-package com.example.authservice.model;
+package com.example.authservice.util;
 
 import java.security.spec.KeySpec;
 import javax.crypto.Cipher;
