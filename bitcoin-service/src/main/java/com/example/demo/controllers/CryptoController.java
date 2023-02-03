@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-import com.example.demo.DTOs.CryptoRequestDTO;
 import com.example.demo.DTOs.CryptoResponseDTO;
 import com.example.demo.DTOs.PaymentRequestDTO;
 import com.example.demo.exceptions.MissingCredentialsException;

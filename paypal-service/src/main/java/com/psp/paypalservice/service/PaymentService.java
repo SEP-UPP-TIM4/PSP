@@ -48,7 +48,7 @@ public class PaymentService {
 
         RedirectUrls redirectUrls = new RedirectUrls();
         redirectUrls.setCancelUrl(paymentRequestDto.getFailedUrl());
-        redirectUrls.setReturnUrl("https://localhost:8081/PAYPAL-SERVICE/api/v1/payment/execute");
+        redirectUrls.setReturnUrl("http://" + System.getenv("ip_address") + ":8081/PAYPAL-SERVICE/api/v1/payment/execute");
         payment.setRedirectUrls(redirectUrls);
 
         APIContext apiContext = new APIContext(credentials.getMerchantId(), credentials.getMerchantPassword(), "sandbox");
@@ -75,7 +75,7 @@ public class PaymentService {
         Amount amount = new Amount();
         amount.setCurrency("USD");
         Double total = paymentRequestDto.getAmount().setScale(2, RoundingMode.HALF_UP).doubleValue();
-        amount.setTotal(String.format("%.2f", total));
+        amount.setTotal("1.0");
 
         Transaction transaction = new Transaction();
         transaction.setDescription("Website services");

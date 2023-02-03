@@ -47,7 +47,7 @@ public class PaymentService {
         ));
         PaymentResponseDto data = new PaymentResponseDto();
         try {
-            data = restTemplate.postForObject("http://localhost:9003/api/v1/payment/validate-qr", body, PaymentResponseDto.class);
+            data = restTemplate.postForObject("http://" + System.getenv("ip_address2") + ":9003/api/v1/payment/validate-qr", body, PaymentResponseDto.class);
         } catch (Exception ex) {
             log.error("Error in communication");
         }

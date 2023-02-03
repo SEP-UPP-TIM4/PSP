@@ -54,7 +54,7 @@ public class UserService {
         userRepository.save(newUser);
         VerificationToken verificationToken = new VerificationToken(newUser);
         verificationTokenService.saveVerificationToken(verificationToken);
-        emailService.sendEmail(newUser.getUsername(), "Account verification", "https://localhost:4200/confirm/" + verificationToken.getToken() + " Click on this link to activate your account");
+        emailService.sendEmail(newUser.getUsername(), "Account verification", "http://"+ System.getenv("ip_address") + ":4200/confirm/" + verificationToken.getToken() + " Click on this link to activate your account");
         return newUser;
     }
 
